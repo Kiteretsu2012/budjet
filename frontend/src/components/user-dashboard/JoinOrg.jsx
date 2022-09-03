@@ -30,6 +30,7 @@ function JoinOrg() {
 		onSubmit: async (values) => {
 			try {
 				setIsSubmitting(true);
+				console.log(values);
 				const res = await api.put('user/join/org', values);
 				setIsSubmitting(false);
 				if (res?.token) {
@@ -58,9 +59,11 @@ function JoinOrg() {
 						</InputLeftElement>
 						<Input
 							backgroundColor={'gray.100'}
-							name="name"
+							name="joiningCode"
 							placeholder="Enter the Joining Code"
+							onBlur={formik.handleBlur}
 							onChange={formik.handleChange}
+							value={formik.values.joiningCode}
 						/>
 					</InputGroup>
 				</FormControl>
