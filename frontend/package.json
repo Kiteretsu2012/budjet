@@ -20,6 +20,8 @@
     "ky": "^0.31.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-button": "^0.7.2",
+    "react-google-login": "^5.2.2",
     "wouter": "^2.8.0-alpha.2"
   },
   "devDependencies": {

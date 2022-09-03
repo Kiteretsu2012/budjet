@@ -1,7 +1,6 @@
 import ky from 'ky';
 
 const kyInstance = ky.create({
-	prefixUrl: '/api',
 	hooks: {
 		beforeRequest: [
 			async (req) => {
@@ -15,6 +14,7 @@ const kyInstance = ky.create({
 		],
 	},
 	credentials: 'include',
+	prefixUrl: 'http://localhost:5000/',
 });
 
 const api = {
