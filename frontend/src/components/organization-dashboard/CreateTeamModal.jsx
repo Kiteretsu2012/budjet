@@ -42,6 +42,7 @@ const validationSchema = Yup.object({
 const ROLES = ['Admin', 'Team Member', 'Team Leader', 'Viewer'];
 
 const CreateTeamModal = ({ isOpen, onClose }) => {
+	const orgID = window.location.pathname.split('/')[2];
 	const toast = useToast();
 	const [teamMembers, setTeamMembers] = useState([{ role: 'Viewer', email: 'goo@goo.com' }]);
 	const [teamName, setTeamName] = useState('');
@@ -53,6 +54,7 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 			setFormData({ name: teamName, members: [] });
 			const res = await api.post('user/check', {
 				email,
+				orgID,
 			});
 			if (res) {
 				setTeamMembers((prevValue) => [...prevValue, { role, email }]);

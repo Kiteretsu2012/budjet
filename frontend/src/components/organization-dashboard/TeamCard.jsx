@@ -1,16 +1,4 @@
-import {
-	Flex,
-	Text,
-	Divider,
-	Heading,
-	Icon,
-	Accordion,
-	AccordionIcon,
-	AccordionButton,
-	AccordionItem,
-	AccordionPanel,
-	Box,
-} from '@chakra-ui/react';
+import { Button, Flex, Text, Divider, Heading, Icon, Box } from '@chakra-ui/react';
 import { FcOrganization, FcPodiumWithSpeaker } from 'react-icons/fc';
 
 const TeamCard = ({ teamName, organization, members }) => {
@@ -49,19 +37,9 @@ const TeamCard = ({ teamName, organization, members }) => {
 					<Text textAlign="center">{members.length}</Text>
 				</Flex>
 			</Flex>
-			<Accordion allowToggle>
-				<AccordionItem>
-					<h2>
-						<AccordionButton>
-							<Box flex="1" textAlign="left">
-								Show all members
-							</Box>
-							<AccordionIcon />
-						</AccordionButton>
-					</h2>
-					<AccordionPanel pb={4}>{members.map((elem) => elem.name)}</AccordionPanel>
-				</AccordionItem>
-			</Accordion>{' '}
+			<Flex w="100%" justifyContent="end">
+				<Button variant="outline">View Members</Button>
+			</Flex>
 		</Flex>
 	);
 };
