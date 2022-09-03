@@ -3,10 +3,8 @@ import Login from '../src/components/login/Login';
 import { getLocalStorageToken } from './utils/getLocalStorageToken';
 import OrganisationDashboard from './views/OrganisationDashboard';
 import UserDashboard from './views/UserDashboard';
-import TeamTable from '../src/components/organization-dashboard/TeamTable';
 
 function App() {
-	// return <UserDashboard />;
 	return (
 		<Router>
 			<Switch>
@@ -33,9 +31,8 @@ function App() {
 					}}
 					redirectTo="/auth"
 				/>
-				<Route exact path="/org/dashboard/teams/:id" component={() => <TeamTable />} />
-				<Route path="/org/:id" component={() => <OrganisationDashboard />} />
-				<Route path="/" component={() => <Redirect to="/login" />} />
+				<Route path="/" component={() => <Redirect to="/auth" />} />
+				<OrganisationDashboard />
 			</Switch>
 		</Router>
 	);

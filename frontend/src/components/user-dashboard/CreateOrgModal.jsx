@@ -25,7 +25,7 @@ function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
 	// const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const toast = useToast();
-	const [location, setLocation] = useLocation();
+	const [, setLocation] = useLocation();
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,7 +38,6 @@ function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
 			try {
 				setIsSubmitting(true);
 				const res = await api.post('/org', values);
-				setIsSubmitting(false);
 				setLocation(`/org/${res._id}`);
 			} catch (err) {
 				toast({
@@ -48,6 +47,8 @@ function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
 					duration: 9000,
 					isClosable: true,
 				});
+			} finally {
+				setIsSubmitting(false);
 			}
 		},
 	});

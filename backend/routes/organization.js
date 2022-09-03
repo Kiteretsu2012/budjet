@@ -17,7 +17,7 @@ organizationRouter.get('/:id/stats', verifyAuthToken, orgController.getStats);
 organizationRouter.get('/:id/budgets', verifyAuthToken, orgController.getBudgets);
 organizationRouter.get('/:id/teams', verifyAuthToken, orgController.getBudgets);
 
-organizationRouter.post('/team', verifyAuthToken, verifyOrgAdmin, orgController.createTeam);
+organizationRouter.post('/:id/team', verifyAuthToken, verifyOrgAdmin, orgController.createTeam);
 organizationRouter.post(
 	'/team/:teamID/user/',
 	verifyAuthToken,
@@ -26,14 +26,14 @@ organizationRouter.post(
 	userController.googleAuth
 );
 organizationRouter.put(
-	'/team/:teamID/user/:userId/role',
+	'/:id/team/:teamID/user/:userId/role',
 	verifyAuthToken,
 	verifyOrgAdmin,
 	verifyTeamLeader,
 	userController.googleAuth
 );
 organizationRouter.delete(
-	'/team/:teamID/user/',
+	'/:id/team/:teamID/user',
 	verifyAuthToken,
 	verifyOrgAdmin,
 	verifyTeamLeader,

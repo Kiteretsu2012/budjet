@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react';
 import {
 	IconButton,
 	Avatar,
@@ -9,7 +8,6 @@ import {
 	VStack,
 	Icon,
 	useColorModeValue,
-	Link,
 	Drawer,
 	DrawerContent,
 	Text,
@@ -29,12 +27,13 @@ import {
 	FiBell,
 	FiChevronDown,
 } from 'react-icons/fi';
+import { Link } from 'wouter';
 
 const LinkItems = [
-	{ name: 'Home', icon: FiHome },
-	{ name: 'Budgets', icon: FiTrendingUp },
-	{ name: 'Teams', icon: FiCompass },
-	{ name: 'Statuses', icon: FiStar },
+	{ name: 'Home', icon: FiHome, link: '/' },
+	{ name: 'Budgets', icon: FiTrendingUp, link: '/budgets' },
+	{ name: 'Teams', icon: FiCompass, link: '/teams' },
+	{ name: 'Statuses', icon: FiStar, link: '/statuses' },
 ];
 function DashboardHeaderSidebar() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,7 +53,6 @@ function DashboardHeaderSidebar() {
 					<SidebarContent onClose={onClose} />
 				</DrawerContent>
 			</Drawer>
-			{/* mobilenav */}
 			<MobileNav onOpen={onOpen} />
 		</>
 	);
@@ -79,17 +77,15 @@ const SidebarContent = ({ onClose, ...rest }) => {
 				<CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
 			</Flex>
 			{LinkItems.map((link) => (
-				<NavItem key={link.name} icon={link.icon}>
-					{link.name}
-				</NavItem>
+				<NavItem key={link.name} icon={link.icon} link={link.link} name={link.name} />
 			))}
 		</Box>
 	);
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, name, link }) => {
 	return (
-		<Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+		<Link to={link} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
 			<Flex
 				align="center"
 				p="4"
@@ -101,7 +97,6 @@ const NavItem = ({ icon, children, ...rest }) => {
 					bg: 'cyan.400',
 					color: 'white',
 				}}
-				{...rest}
 			>
 				{icon && (
 					<Icon
@@ -113,7 +108,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 						as={icon}
 					/>
 				)}
-				{children}
+				{name}
 			</Flex>
 		</Link>
 	);
