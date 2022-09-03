@@ -1,5 +1,4 @@
 import { connectToMongoDB } from '#config';
-import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -21,7 +20,7 @@ const main = async () => {
 
 	app.use(express.json({ limit: '50mb' }));
 	app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5000 }));
-	app.use(express.static(path.resolve('../', 'frontend', 'dist')));
+	// app.use(express.static(path.resolve('../', 'frontend', 'dist')));
 	app.use(
 		helmet({
 			referrerPolicy: {
@@ -35,13 +34,10 @@ const main = async () => {
 		})
 	);
 
-	app.use('/api', apiRouter);
-	app.use('/', (req, res) => {
-		res.sendFile(path.resolve('../', 'frontend', 'dist', 'index.html'));
-	});
+	app.use('/', apiRouter);
 
 	app.listen(PORT, () => {
-		logger.info(`Running at PORT: ${PORT}}`);
+		logger.info(`Running at PORT: ${PORT}`);
 	});
 };
 

@@ -1,13 +1,27 @@
 import mongoose from 'mongoose';
+import validator from 'validator';
 
-const { Schema, Model } = mongoose;
+const { Schema } = mongoose;
 
-const User = new Schema({
+const userSchema = new Schema({
 	name: String,
-	role: [
-		{
-			level: { type: String, enum: ['ADMIN', 'TEAM_LEADER', 'TEAM_MEMBER', 'VIEWER'] }, // viewer doesn't require login
-			team: { type: mongoose.SchemaTypes.ObjectId, ref: 'teams' }, // value will be null for admins
-		},
-	],
+	email: {
+		type: String,
+		validate: { validator: validator.isEmail },
+	},
 });
+
+userSchema.pre('save', function save(next) {
+	const profile = this;
+	profile.lastUpdated = Date.now();
+	next();
+});
+
+userSchema.pre('updateOne', function updateOne(next) {
+	const profile = this;
+	profile.lastUpdated = Date.now();
+	next();
+});
+
+const User = mongoose.model('user', userSchema);
+export default User;
