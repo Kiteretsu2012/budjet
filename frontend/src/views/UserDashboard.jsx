@@ -71,7 +71,7 @@ function UserDashboard() {
 			>
 				{' '}
 				<VStack>
-					<Text fontSize={'2.2rem'} fontFamily="fantasy" mb="1rem">
+					<Text fontSize={'2.2rem'} mb="1rem">
 						Get started with <strong>BudJet</strong> to propel your budget management.
 					</Text>
 					<Text fontSize={'2rem'} fontWeight={'medium'}>
