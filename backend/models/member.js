@@ -12,6 +12,8 @@ const memberSchema = new Schema({
 	],
 });
 
+memberSchema.index({ user: 1, organization: 1 }, { unique: true });
+
 memberSchema.pre('save', function save(next) {
 	const profile = this;
 	profile.lastUpdated = Date.now();

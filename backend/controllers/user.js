@@ -102,11 +102,26 @@ export const getOrganizations = async (req, res) => {
 
 export const checkUser = async (req, res) => {
 	try {
-		const user = await User.find({ email: res.locals.email });
+		const user = await User.findOne({ email: res.locals.email });
 
 		if (!user) {
-			return res.status(404).json({ message: 'Not found' });
+			return res
+				.status(404)
+				.json({ message: "The E-Mail provided isn't associated with a BudJet account." });
 		}
+
+		const member = await Member.findOne({
+			user: user._id,
+			organization: res.locals.organizationID,
+		});
+
+		if (!member) {
+			return res.status(404).json({
+				message:
+					"The E-Mail provided isn't a part of the organization. Please add them to the organization.",
+			});
+		}
+
 		return res.status(200).json({ message: 'Found' });
 	} catch (err) {
 		logger.error(err.message);

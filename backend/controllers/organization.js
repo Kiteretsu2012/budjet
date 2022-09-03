@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { Member, Organization } from '#models';
+import { Member, Organization, Team, User } from '#models';
 import { logger } from '#utils';
 import mongoose from 'mongoose';
 
@@ -72,9 +72,38 @@ export const deleteOrganization = async (req, res) => {
 
 export const createTeam = async (req, res) => {
 	try {
-		await Organization.findByIdAndDelete(req.params.id);
+		const users = await User.find(
+			{ $in: req.body.members.map(({ email }) => email) },
+			{ _id: 1, email: 1 }
+		);
 
-		res.status(200).json({});
+		const userEmailToID = Object.fromEntries(users.map(({ email, _id }) => [email, _id]));
+
+		if (users.length !== req.body.members.length) {
+			return res.status(404).json({ message: "Some E-Mails don't have BudJet account." });
+		}
+
+		const members = await Member.find({
+			user: { $in: users.map(({ _id }) => _id) },
+			organization: res.locals.organizationID,
+		});
+
+		if (members.length !== req.body.members.length) {
+			return res.status(404).json({ message: "Some E-Mails aren't in the organization." });
+		}
+
+		const team = new Team({
+			name: req.body.name,
+			organization: res.locals.organizationID,
+			members: req.body.members.map((member) => {
+				return {
+					id: members.find(({ email, user }) => user.equals(userEmailToID[email]))._id,
+					level: member.level,
+				};
+			}),
+		});
+
+		res.status(200).json(team.toObject());
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });
