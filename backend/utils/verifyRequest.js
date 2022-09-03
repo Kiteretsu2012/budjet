@@ -27,14 +27,13 @@ export const verifyOrgMember = async (req, res, next) => {
 			id: res.locals._id,
 			organization: req.params.orgID,
 		});
+		if (!member) {
+			return res.status(400).send({ message: 'Not a member' });
+		}
 
 		res.locals.orgID = req.params.orgID;
 		res.locals.member = member;
 
-		const isOrgMember = member.roles.some(({ level }) => level === 'MEMBER');
-		if (!isOrgMember) {
-			return res.status(400).send({ message: 'Not a member' });
-		}
 		return next();
 	} catch (error) {
 		logger.error(error.message, error);
