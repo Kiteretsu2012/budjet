@@ -23,5 +23,5 @@ memberSchema.pre('updateOne', function updateOne(next) {
 	profile.lastUpdated = Date.now();
 	next();
 });
-
-export default mongoose.model('members', memberSchema);
+const Member = mongoose.model('members', memberSchema);
+export default Member;

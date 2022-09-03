@@ -1,8 +1,26 @@
 import mongoose from 'mongoose';
 
-const { Schema, Model } = mongoose;
+const { Schema } = mongoose;
 
-const Organization = new Schema({
-	name: String,
-	admin: {},
+const orgSchema = new Schema({
+	name: { type: String, unique: true },
+	description: String,
+	joiningCode: { type: String, unique: true },
+	invites: { type: [mongoose.SchemaTypes.ObjectId], ref: 'users', default: [] },
+	creator: { type: mongoose.SchemaTypes.ObjectId, ref: 'users' },
 });
+
+orgSchema.pre('save', function save(next) {
+	const profile = this;
+	profile.lastUpdated = Date.now();
+	next();
+});
+
+orgSchema.pre('updateOne', function updateOne(next) {
+	const profile = this;
+	profile.lastUpdated = Date.now();
+	next();
+});
+
+const Organization = mongoose.model('user', orgSchema);
+export default Organization;
