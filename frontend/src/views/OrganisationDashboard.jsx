@@ -36,7 +36,7 @@ function OrganisationDashboard() {
 				>
 					<Flex direction="column" justify="left">
 						<Heading justifySelf="left" marginBottom="0.5rem">
-							Hello, {userDetails?.name} 👋
+							Welcome to {userDetails?.name} 👋
 						</Heading>
 						<Text opacity="80%">This is some placeholder text</Text>
 					</Flex>
@@ -44,7 +44,8 @@ function OrganisationDashboard() {
 						<Button
 							// bg="#49B6FF"
 							// color="white"
-							colorScheme="faceb"
+							colorScheme="purple"
+							color="white"
 							onClick={() => setisAddBudgetModalVisible(true)}
 						>
 							Create Budget

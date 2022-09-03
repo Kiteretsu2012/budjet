@@ -7,7 +7,7 @@ services:
       buildFilter:
           paths:
               - backend/**/*
-      startCommand: node -r dotenv/config index.js
+      startCommand: node index.js
     - type: web
       name: frontend
       env: static

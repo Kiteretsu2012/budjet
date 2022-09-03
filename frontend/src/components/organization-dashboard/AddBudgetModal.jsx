@@ -16,26 +16,30 @@ import {
 	Textarea,
 	useToast,
 } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useField, useFormik } from 'formik';
+import { useEffect, useState } from 'react';
 import { TiBusinessCard } from 'react-icons/ti';
 import { useLocation } from 'wouter';
+import { MultiSelect } from 'react-multi-select-component';
 import api from '../../utils/api';
 
 function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVisible }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [location, setLocation] = useLocation();
+	const [teams, setTeams] = useState([]);
+	const [selected, setSelected] = useState([]);
 	const toast = useToast();
 
 	const formik = useFormik({
 		initialValues: {
-			name: '',
+			title: '',
 			description: '',
+			teams: [],
 		},
 		onSubmit: async (values) => {
 			try {
 				setIsSubmitting(true);
-				const res = await api.post('/org', values);
+				const res = await api.post(`org/${orgID}/budget`, { ...values, ...selected });
 				setIsSubmitting(false);
 				setLocation(`/org/${orgID}/budget/${res._id}`);
 			} catch (err) {
@@ -51,7 +55,36 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 	});
 	const onClose = () => {
 		setIsAddBudgetModalVisible(false);
+		setIsSubmitting(false);
 	};
+	useEffect(() => {
+		const fetchTeams = async () => {
+			try {
+				const res = await api.get(`org/${orgID}/teams`);
+				const teams =
+					res.length > 0
+						? res.map((team) => {
+								return {
+									label: team.name,
+									value: team._id,
+								};
+						  })
+						: [];
+				setTeams(teams);
+			} catch (err) {
+				setIsSubmitting(false);
+				toast({
+					title: 'Error',
+					description: err.message,
+					status: 'error',
+					duration: 9000,
+					isClosable: true,
+				});
+			}
+		};
+		fetchTeams();
+	}, []);
+
 	return (
 		<Modal isOpen={isAddBudgetModalVisible} onClose={onClose}>
 			<ModalOverlay />
@@ -67,13 +100,14 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 									<Icon as={TiBusinessCard} w={7} h={7} />
 								</InputLeftElement>
 								<Input
+									required
 									onChange={formik.handleChange}
 									name="title"
 									placeholder="Enter title of the budget"
 								/>
 							</InputGroup>
 						</FormControl>
-						<FormControl>
+						<FormControl mb="1rem">
 							<FormLabel>Budget Description</FormLabel>
 							<InputGroup>
 								<Textarea
@@ -82,6 +116,16 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 									placeholder="Enter description of the budget"
 								/>
 							</InputGroup>
+						</FormControl>
+						<FormControl>
+							<FormLabel>Teams Involved</FormLabel>
+							<MultiSelect
+								options={teams}
+								name="teams"
+								value={selected}
+								onChange={setSelected}
+								labelledBy="Select"
+							/>
 						</FormControl>
 					</ModalBody>
 

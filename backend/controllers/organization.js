@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { Member, Organization, Team, User } from '#models';
+import { Budget, Member, Organization, Team, User } from '#models';
 import { logger } from '#utils';
 import mongoose from 'mongoose';
 
@@ -50,6 +50,26 @@ export const getOrganizationDetails = async (req, res) => {
 export const getStats = async (req, res) => {
 	try {
 		res.status(200).json([]);
+	} catch (err) {
+		logger.error(err.message);
+		res.status(500).json({ message: 'Error' });
+	}
+};
+
+export const getBudgets = async (req, res) => {
+	try {
+		const budgets = await Budget.find({ organization: res.locals.organizationID });
+		res.status(200).json(budgets);
+	} catch (err) {
+		logger.error(err.message);
+		res.status(500).json({ message: 'Error' });
+	}
+};
+
+export const getTeams = async (req, res) => {
+	try {
+		const teams = await Team.find({ organization: res.locals.organizationID });
+		res.status(200).json(teams);
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });
