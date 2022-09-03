@@ -37,8 +37,10 @@ const TeamCard = ({ teamName, organization, members }) => {
 					<Text textAlign="center">{members.length}</Text>
 				</Flex>
 			</Flex>
-			<Flex w="100%" justifyContent="end">
-				<Button variant="outline">View Members</Button>
+			<Flex w="100%" justifyContent="center" mt="20px">
+				<Button variant="outline" colorScheme="blue">
+					View Members
+				</Button>
 			</Flex>
 		</Flex>
 	);

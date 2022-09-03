@@ -22,7 +22,7 @@ import {
 	Box,
 } from '@chakra-ui/react';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TiBusinessCard } from 'react-icons/ti';
 import { useFormik } from 'formik';
 import api from '../../utils/api';
@@ -39,29 +39,33 @@ const validationSchema = Yup.object({
 	level: Yup.string().required('Required'),
 });
 
-const ROLES = ['Admin', 'Team Member', 'Team Leader', 'Viewer'];
+const ROLES = ['TEAM_MEMBER', 'TEAM_LEADER'];
+const roleDisplayMap = {
+	TEAM_MEMBER: 'Team Member',
+	TEAM_LEADER: 'Team Leader',
+};
 
 const CreateTeamModal = ({ isOpen, onClose }) => {
 	const orgID = window.location.pathname.split('/')[2];
 	const toast = useToast();
-	const [teamMembers, setTeamMembers] = useState([{ role: 'Viewer', email: 'goo@goo.com' }]);
-	const [teamName, setTeamName] = useState('');
+	const [teamMembers, setTeamMembers] = useState([]);
 	const [formData, setFormData] = useState({});
+	useEffect(() => {
+		setFormData((prevState) => ({ ...prevState, members: teamMembers }));
+	}, [teamMembers]);
 	const onSubmit = async (v, actions) => {
 		console.log('in');
-		const { email, role, teamName } = v;
+		const { email, level, teamName } = v;
 		try {
-			setFormData({ name: teamName, members: [] });
 			const res = await api.post('user/check', {
 				email,
 				orgID,
 			});
 			if (res) {
-				setTeamMembers((prevValue) => [...prevValue, { role, email }]);
-				setFormData((prevState) => ({ ...prevState, members: teamMembers }));
-				console.log(formData);
+				setTeamMembers((prevValue) => [...prevValue, { level, email }]);
+				setFormData({ name: teamName, members: teamMembers });
 				actions.resetForm({
-					values: { email },
+					values: { teamName },
 				});
 			}
 		} catch (err) {
@@ -79,7 +83,7 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 		if (teamMembers.length) {
 			try {
 				const res = await api.post('org/team', {
-					formData,
+					...formData,
 				});
 			} catch (err) {
 				const message = JSON.parse(await err.response.text()).message;
@@ -136,7 +140,7 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 								<FormErrorMessage>{formik.errors.teamName}</FormErrorMessage>
 							</FormControl>
 							<VStack>
-								{teamMembers.map(({ role, email }, index) => (
+								{teamMembers.map(({ level, email }, index) => (
 									<Flex key={email} mt="20px">
 										<Flex direction="column">
 											<FormLabel>Email of Team Member {index + 1}</FormLabel>
@@ -144,7 +148,7 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 										</Flex>
 										<Flex direction="column">
 											<FormLabel>Role of Team Member {index + 1}</FormLabel>
-											<Input value={role} disabled />
+											<Input value={level} disabled />
 										</Flex>
 										<Button
 											bg="#FE5C5C"
@@ -188,7 +192,9 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 										placeholder="Choose Role"
 									>
 										{ROLES.map((elem) => (
-											<option value={elem}>{elem}</option>
+											<option value={elem} key={elem}>
+												{roleDisplayMap[elem]}
+											</option>
 										))}
 									</Select>
 									<FormErrorMessage>{formik.errors.level}</FormErrorMessage>

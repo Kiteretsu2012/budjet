@@ -9,20 +9,22 @@ import {
 	TableCaption,
 	TableContainer,
 	useToast,
+	Button,
+	Flex,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 
 const BudgetTable = () => {
 	const toast = useToast();
-	const [budgets, setBudgets] = useState([]);
+	const [expenses, setExpenses] = useState([]);
 	useEffect(() => {
 		const dataFetcher = async () => {
-			const orgId = '63138fe776adc9d5ad9aa3bf';
-			const expenseId = '1234';
+			const orgID = window.location.pathname.split('/')[2];
+			const expenseID = window.location.pathname.split('/')[4];
 			try {
-				const res = await api.get(`budget/${expenseId}`).json();
-				setBudgets(res);
+				const res = await api.get(`budget/${expenseID}`).json();
+				setExpenses(res);
 			} catch (err) {
 				const message = JSON.parse(await err.response.text()).message;
 				toast({
@@ -37,40 +39,44 @@ const BudgetTable = () => {
 		dataFetcher();
 	}, []);
 	return (
-		<TableContainer
-			bg="white"
-			style={{
-				borderRadius: '12px',
-				boxShadow: '10px 10px 30px #cdcdcd, -10px -10px 30px #ffffff',
-			}}
-		>
-			<Table variant="simple">
-				<TableCaption>List Of All Impending Budgets</TableCaption>
-				<Thead>
-					<Tr>
-						<Th>Title</Th>
-						<Th>Description</Th>
-						<Th>Teams</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-					{budgets.map(({ title, organization, teams }) => (
-						<Tr key={title}>
-							<Td>{title}</Td>
-							<Td>{organization}</Td>
-							<Td>{teams.map((elem) => elem)}</Td>
+		<>
+			<Flex justify="end">
+				<Button bg="#0Ae406" color="white" mb="20px">
+					New Expense
+				</Button>
+			</Flex>
+			<TableContainer
+				bg="white"
+				style={{
+					borderRadius: '12px',
+					boxShadow: '10px 10px 30px #cdcdcd, -10px -10px 30px #ffffff',
+				}}
+			>
+				<Table variant="simple">
+					<TableCaption>List Of All Impending Budgets</TableCaption>
+					<Thead>
+						<Tr>
+							<Th>Title</Th>
+							<Th>Description</Th>
+							<Th>Plan-A</Th>
+							<Th>Plan-B</Th>
+							<Th>Plan-C</Th>
 						</Tr>
-					))}
-				</Tbody>
-				<Tfoot>
-					<Tr>
-						<Th>List</Th>
-						<Th>Of All</Th>
-						<Th isNumeric>impending budgets</Th>
-					</Tr>
-				</Tfoot>
-			</Table>
-		</TableContainer>
+					</Thead>
+					<Tbody>
+						{expenses.map(({ title, description, amounts: { A, B, C } }) => (
+							<Tr key={title}>
+								<Td>{title}</Td>
+								<Td>{description}</Td>
+								<Td>{A}</Td>
+								<Td>{B}</Td>
+								<Td>{C}</Td>
+							</Tr>
+						))}
+					</Tbody>
+				</Table>
+			</TableContainer>
+		</>
 	);
 };
 
