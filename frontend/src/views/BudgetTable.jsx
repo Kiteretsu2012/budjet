@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 
-const BudgetsTable = () => {
+const BudgetTable = () => {
 	const toast = useToast();
 	const [budgets, setBudgets] = useState([]);
 	useEffect(() => {
@@ -74,4 +74,4 @@ const BudgetsTable = () => {
 	);
 };
 
-export default BudgetsTable;
+export default BudgetTable;

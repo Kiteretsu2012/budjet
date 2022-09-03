@@ -17,6 +17,7 @@ import DashboardRecentExpenses from '../components/organization-dashboard/Dashbo
 import TeamTable from '../components/organization-dashboard/TeamTable';
 import api from '../utils/api';
 import Budgets from './Budgets';
+import BudgetTable from './BudgetTable';
 
 function OrganisationDashboard() {
 	const [userDetails] = useState(JSON.parse(localStorage.getItem('userDetails')));
@@ -91,6 +92,7 @@ function OrganisationDashboard() {
 					/>
 					<Route path="/budgets" component={() => <Budgets orgID={orgID} />} />
 					<Route path="/teams" component={TeamTable} />
+					<Route path="/budget/:id" component={BudgetTable} />
 				</Box>
 			</Box>
 		</Router>
