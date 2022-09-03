@@ -102,7 +102,7 @@ export const getOrganizations = async (req, res) => {
 
 export const checkUser = async (req, res) => {
 	try {
-		const user = await User.findOne({ email: res.body.email });
+		const user = await User.findOne({ email: req.body.email });
 
 		if (!user) {
 			return res

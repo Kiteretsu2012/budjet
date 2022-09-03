@@ -28,6 +28,8 @@ export const verifyOrgAdmin = async (req, res, next) => {
 			organization: req.headers.organizationid,
 		});
 
+		res.locals.organizationID = req.headers.organizationid;
+
 		const isOrgAdmin = member.roles.some(({ level }) => level === 'ADMIN');
 		if (!isOrgAdmin) {
 			return res.status(400).send({ message: 'Not an admin' });

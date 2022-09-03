@@ -5,7 +5,13 @@ const { Schema } = mongoose;
 const expenseSchema = new Schema({
 	title: { type: String },
 	description: String,
-	
+	budget: { type: mongoose.SchemaTypes.ObjectId, ref: 'budgets' },
+	amounts: {
+		A: Number,
+		B: Number,
+		C: Number,
+	},
+	tags: { type: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'tags' }], default: [] },
 });
 
 expenseSchema.pre('save', function save(next) {

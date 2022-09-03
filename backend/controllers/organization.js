@@ -38,11 +38,9 @@ export const createOrganization = async (req, res) => {
 
 export const getOrganizationDetails = async (req, res) => {
 	try {
-		const userID = res.locals._id;
-
 		const organization = await Organization.findById(req.params.id);
 
-		res.status(200).json();
+		res.status(200).json(organization.toObject());
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });
@@ -51,8 +49,6 @@ export const getOrganizationDetails = async (req, res) => {
 
 export const getStats = async (req, res) => {
 	try {
-		const userID = res.locals._id;
-
 		res.status(200).json([]);
 	} catch (err) {
 		logger.error(err.message);
