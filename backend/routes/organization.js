@@ -14,6 +14,8 @@ organizationRouter.delete(
 );
 
 organizationRouter.get('/:id/stats', verifyAuthToken, orgController.getStats);
+organizationRouter.get('/:id/budgets', verifyAuthToken, orgController.getBudgets);
+organizationRouter.get('/:id/teams', verifyAuthToken, orgController.getBudgets);
 
 organizationRouter.post('/team', verifyAuthToken, verifyOrgAdmin, orgController.createTeam);
 organizationRouter.post(

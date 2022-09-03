@@ -10,6 +10,10 @@ export const verifyAuthToken = (req, res, next) => {
 	try {
 		const payload = verify(req.headers.authorization, process.env.AUTH_TOKEN);
 
+		if (req.headers.organizationid) {
+			res.locals.organizationID = req.headers.organizationid;
+		}
+
 		res.locals = payload;
 		return next();
 	} catch (error) {
