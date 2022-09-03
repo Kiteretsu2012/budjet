@@ -33,7 +33,7 @@ const Header = ({ name }) => {
 				fontFamily="monospace"
 				fontWeight="bold"
 			>
-				BudJet
+				BudJet 🚀
 			</Text>
 
 			<HStack spacing={{ base: '0', md: '6' }}>
