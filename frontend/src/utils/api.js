@@ -5,9 +5,17 @@ const kyInstance = ky.create({
 		beforeRequest: [
 			async (req) => {
 				if (!req.url.endsWith('/user/auth')) {
+					req.headers.append('Authorization', `${localStorage.getItem('AUTH_TOKEN')}`);
+				}
+			},
+			async (req) => {
+				console.log(req.path);
+				if (req.path?.startsWith('/org')) {
 					req.headers.append(
-						'Authorization',
-						`Bearer ${localStorage.getItem('AUTH_TOKEN')}`
+						'OrganisationID',
+						`${window.location.href.substring(
+							window.location.href.lastIndexOf('/') + 1
+						)}`
 					);
 				}
 			},

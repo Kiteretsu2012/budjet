@@ -2,9 +2,11 @@ import { Text, Button, useToast, Heading, VStack, Box } from '@chakra-ui/react';
 import GoogleLogin from 'react-google-login';
 import GoogleButton from 'react-google-button';
 import api from '../../utils/api';
+import { useLocation } from 'wouter';
 
 const Login = () => {
 	const toast = useToast();
+	const [location, setLocation] = useLocation();
 	const handleFailure = async (error, details) => {
 		console.log(error, details);
 	};
@@ -16,6 +18,7 @@ const Login = () => {
 			if (res?.token) {
 				localStorage.setItem('AUTH_TOKEN', res.token);
 			}
+			setLocation(`/user/dashboard`);
 		} catch (err) {
 			toast({
 				title: 'Error',
