@@ -25,7 +25,6 @@ import {
 	FiTrendingUp,
 	FiCompass,
 	FiStar,
-	FiSettings,
 	FiMenu,
 	FiBell,
 	FiChevronDown,
@@ -33,10 +32,9 @@ import {
 
 const LinkItems = [
 	{ name: 'Home', icon: FiHome },
-	{ name: 'Expenses', icon: FiTrendingUp },
-	{ name: 'Events', icon: FiCompass },
+	{ name: 'Budgets', icon: FiTrendingUp },
+	{ name: 'Teams', icon: FiCompass },
 	{ name: 'Statuses', icon: FiStar },
-	{ name: 'Create', icon: FiSettings },
 ];
 function DashboardHeaderSidebar() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -76,7 +74,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 		>
 			<Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
 				<Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-					Logo
+					BudJet 🚀
 				</Text>
 				<CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
 			</Flex>

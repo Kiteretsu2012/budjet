@@ -24,6 +24,7 @@
     "react-google-button": "^0.7.2",
     "react-google-login": "^5.2.2",
     "react-icons": "^4.4.0",
+    "react-multi-select-component": "^4.3.3",
     "wouter": "^2.8.0-alpha.2",
     "yup": "^0.32.11"
   },
