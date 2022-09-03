@@ -5,10 +5,12 @@ const kyInstance = ky.create({
 	hooks: {
 		beforeRequest: [
 			async (req) => {
-				// some auth logic
-				// if (!req.url.endsWith('leave')) {
-				// 	req.headers.append('idToken', await auth.currentUser.getIdToken());
-				// }
+				if (!req.url.endsWith('/user/auth')) {
+					req.headers.append(
+						'Authorization',
+						`Bearer ${localStorage.getItem('AUTH_TOKEN')}`
+					);
+				}
 			},
 		],
 	},
