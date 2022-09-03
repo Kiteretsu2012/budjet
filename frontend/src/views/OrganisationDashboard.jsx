@@ -69,7 +69,11 @@ function OrganisationDashboard() {
 										<Heading justifySelf="left" marginBottom="0.5rem">
 											Welcome to {userDetails?.name} 👋
 										</Heading>
-										<Text opacity="80%">This is some placeholder text</Text>
+										<Text opacity="80%">
+											Feel free to <strong>explore</strong> , gain{' '}
+											<strong>insights</strong> or start making{' '}
+											<strong>budgets</strong>!
+										</Text>
 									</Flex>
 									<Box>
 										<Button

@@ -5,10 +5,7 @@ const kyInstance = ky.create({
 		beforeRequest: [
 			async (req) => {
 				if (!req.url.endsWith('/user/auth')) {
-					req.headers.append(
-						'Authorization',
-						decodeURI(localStorage.getItem('AUTH_TOKEN'))
-					);
+					req.headers.set('Authorization', localStorage.getItem('AUTH_TOKEN'));
 				}
 			},
 		],

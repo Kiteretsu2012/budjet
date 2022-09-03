@@ -49,80 +49,44 @@ const Budgets = ({ orgID }) => {
 				<VStack>
 					{budgets.map((budget, index) => {
 						return (
-							<Flex
+							<HStack
 								key={index}
-								p={50}
-								w="full"
-								alignItems="center"
-								justifyContent="center"
+								backgroundColor="black"
+								p="2rem"
+								borderRadius="1rem"
+								justify="space-between"
 							>
-								<Flex
-									maxW="md"
-									mx="auto"
-									bg="gray.800"
-									shadow="lg"
-									rounded="lg"
-									overflow="hidden"
+								<Heading
+									fontSize="2xl"
+									fontWeight="bold"
+									color="white"
+									_dark={{
+										color: 'white',
+									}}
 								>
-									<Box
-										p={{
-											base: 4,
-											md: 4,
-										}}
-									>
-										<Heading
-											fontSize="2xl"
-											fontWeight="bold"
-											color="white"
-											_dark={{
-												color: 'white',
-											}}
-										>
-											{budget.title}
-										</Heading>
-										<Text
-											mt={2}
-											fontSize="sm"
-											color="gray.600"
-											_dark={{
-												color: 'gray.400',
-											}}
-										>
-											{budget.description}
-										</Text>
-										<Flex
-											mt={3}
-											alignItems="center"
-											// justifyContent="space-between"
-											justifyContent="flex-end"
-										>
-											{/* <Heading color="white" fontWeight="bold" fontSize="lg">
-												{levelsMap[budget.level]}
-											</Heading> */}
-											<Button
-												px={2}
-												py={1}
-												as={Link}
-												to={`/budget/${budget._id}`}
-												bg="white"
-												fontSize="xs"
-												color="gray.900"
-												fontWeight="bold"
-												rounded="lg"
-												textTransform="uppercase"
-												_hover={{
-													bg: 'gray.200',
-												}}
-												_focus={{
-													bg: 'gray.400',
-												}}
-											>
-												Take a closer look
-											</Button>
-										</Flex>
-									</Box>
-								</Flex>
-							</Flex>
+									{budget.title}
+								</Heading>
+								<Button
+									as={Link}
+									to={`/org/${organisation._id}`}
+									px={2}
+									py={1}
+									bg="white"
+									fontSize="xs"
+									color="gray.900"
+									fontWeight="bold"
+									rounded="lg"
+									textTransform="uppercase"
+									_hover={{
+										bg: 'gray.200',
+									}}
+									_focus={{
+										bg: 'gray.400',
+									}}
+								>
+									Go to Organisation
+								</Button>
+							</HStack>
 						);
 					})}
 				</VStack>

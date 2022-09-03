@@ -35,6 +35,7 @@ const LinkItems = [
 	{ name: 'Teams', icon: FiCompass, link: '/teams' },
 	{ name: 'Statuses', icon: FiStar, link: '/statuses' },
 ];
+const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 function DashboardHeaderSidebar() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	return (
@@ -141,7 +142,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 				fontFamily="monospace"
 				fontWeight="bold"
 			>
-				Logo
+				BudJet 🚀
 			</Text>
 
 			<HStack spacing={{ base: '0', md: '6' }}>
@@ -152,9 +153,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
 							<HStack>
 								<Avatar
 									size={'sm'}
-									src={
-										'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-									}
+									src={`https://source.boringavatars.com/marble/120/${
+										userDetails?.name || 'Justina Clark'
+									}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`}
 								/>
 								<VStack
 									display={{ base: 'none', md: 'flex' }}
@@ -162,9 +163,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
 									spacing="1px"
 									ml="2"
 								>
-									<Text fontSize="sm">Justina Clark</Text>
+									<Text fontSize="sm">{userDetails.name}</Text>
 									<Text fontSize="xs" color="gray.600">
-										Admin
+										Member
 									</Text>
 								</VStack>
 								<Box display={{ base: 'none', md: 'flex' }}>
