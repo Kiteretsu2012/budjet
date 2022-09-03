@@ -43,6 +43,7 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 				setIsSubmitting(false);
 				setLocation(`/org/${orgID}/budget/${res._id}`);
 			} catch (err) {
+				setIsSubmitting(false);
 				toast({
 					title: 'Error',
 					description: err.message,

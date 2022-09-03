@@ -1,17 +1,48 @@
-import { Box, Button, Flex, Heading, HStack, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Heading,
+	HStack,
+	Text,
+	useColorModeValue,
+	useToast,
+} from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Route, Router } from 'wouter';
 import AddBudgetModal from '../components/organization-dashboard/AddBudgetModal';
 import DashboardHeaderSidebar from '../components/organization-dashboard/DashboardHeaderSidebar';
 import DashboardRecentExpenses from '../components/organization-dashboard/DashboardRecentExpenses';
 import TeamTable from '../components/organization-dashboard/TeamTable';
-import BudgetsTable from './BudgetsTable';
+import api from '../utils/api';
+import Budgets from './Budgets';
 
 function OrganisationDashboard() {
 	const [userDetails] = useState(JSON.parse(localStorage.getItem('userDetails')));
 	const [isAddBudgetModalVisible, setisAddBudgetModalVisible] = useState(false);
+	const [organisationDetails, setOrganisationDetails] = useState({});
+	const toast = useToast();
 
 	const orgID = window.location.pathname.split('/')[2];
+
+	useEffect(() => {
+		const fetchOrganisationDetails = async () => {
+			try {
+				const res = await api.get(`org/${orgID}`);
+				setOrganisationDetails(res);
+			} catch (err) {
+				toast({
+					title: 'Error',
+					description: err.message,
+					status: 'error',
+					duration: 9000,
+					isClosable: true,
+				});
+			}
+		};
+		fetchOrganisationDetails();
+	}, []);
 	return (
 		<Router base={'/org/' + orgID} key={'/org/' + orgID}>
 			<Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -54,7 +85,7 @@ function OrganisationDashboard() {
 							</>
 						)}
 					/>
-					<Route path="/budgets" component={BudgetsTable} />
+					<Route path="/budgets" component={() => <Budgets orgID={orgID} />} />
 					<Route path="/teams" component={TeamTable} />
 				</Box>
 			</Box>

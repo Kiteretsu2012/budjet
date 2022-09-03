@@ -17,6 +17,10 @@ const Login = () => {
 			});
 			if (res?.token) {
 				localStorage.setItem('AUTH_TOKEN', res.token);
+				localStorage.setItem(
+					'userDetails',
+					JSON.stringify({ name: res.name, email: res.email })
+				);
 			}
 			setLocation(`/user/dashboard`);
 		} catch (err) {

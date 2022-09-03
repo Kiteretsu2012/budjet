@@ -7,19 +7,23 @@ import {
 	HStack,
 	Text,
 	useColorModeValue,
+	useToast,
 	VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { FaKey, FaPlus } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
+import { Link } from 'wouter';
 import levelsMap from '../../constants/levelsMap';
 import CreateOrgModal from '../components/user-dashboard/CreateOrgModal';
 import Empty from '../components/user-dashboard/Empty';
 
 import Header from '../components/user-dashboard/Header';
 import JoinOrg from '../components/user-dashboard/JoinOrg';
+import api from '../utils/api';
 
 function UserDashboard() {
-	const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem('userDetails')));
+	const [organisations, setOrganisations] = useState([]);
+	const toast = useToast();
 	// console.log(userDetails);
 	// const userDetails = {
 	// 	organisations: [
@@ -28,6 +32,25 @@ function UserDashboard() {
 	// 		{ name: 'E-Cell', level: 'ADMIN' },
 	// 	],
 	// };
+
+	useEffect(() => {
+		const fetchTeams = async () => {
+			try {
+				const res = await api.get(`user/orgs`);
+				const body = await res.json();
+				setOrganisations(body);
+			} catch (err) {
+				toast({
+					title: 'Error',
+					description: err.message,
+					status: 'error',
+					duration: 9000,
+					isClosable: true,
+				});
+			}
+		};
+		fetchTeams();
+	}, []);
 
 	const [createOrgModalVisible, setCreateOrgModalVisible] = useState(false);
 	return (
@@ -73,86 +96,48 @@ function UserDashboard() {
 				<Box height="40vh">
 					<Divider orientation="vertical" borderWidth="0.2rem" borderColor="white" />
 				</Box>
-				{userDetails?.organisations?.length > 0 ? (
+				{organisations?.length > 0 ? (
 					<VStack>
-						{userDetails.organisations.map((organisation, index) => {
+						{organisations.map((organisation, index) => {
 							return (
-								<Flex
+								<HStack
 									key={index}
-									p={50}
-									w="full"
-									alignItems="center"
-									justifyContent="center"
+									backgroundColor="black"
+									p="2rem"
+									borderRadius="1rem"
+									justify="space-between"
 								>
-									<Flex
-										maxW="md"
-										mx="auto"
-										bg="gray.800"
-										shadow="lg"
-										rounded="lg"
-										overflow="hidden"
+									<Heading
+										fontSize="2xl"
+										fontWeight="bold"
+										color="white"
+										_dark={{
+											color: 'white',
+										}}
 									>
-										<Box
-											p={{
-												base: 4,
-												md: 4,
-											}}
-										>
-											<Heading
-												fontSize="2xl"
-												fontWeight="bold"
-												color="white"
-												_dark={{
-													color: 'white',
-												}}
-											>
-												{organisation.name}
-											</Heading>
-											<Text
-												mt={2}
-												fontSize="sm"
-												color="gray.600"
-												_dark={{
-													color: 'gray.400',
-												}}
-											>
-												Lorem ipsum dolor sit amet consectetur adipisicing
-												elit In odit
-											</Text>
-											<Flex
-												mt={3}
-												alignItems="center"
-												justifyContent="space-between"
-											>
-												<Heading
-													color="white"
-													fontWeight="bold"
-													fontSize="lg"
-												>
-													{levelsMap[organisation.level]}
-												</Heading>
-												<Button
-													px={2}
-													py={1}
-													bg="white"
-													fontSize="xs"
-													color="gray.900"
-													fontWeight="bold"
-													rounded="lg"
-													textTransform="uppercase"
-													_hover={{
-														bg: 'gray.200',
-													}}
-													_focus={{
-														bg: 'gray.400',
-													}}
-												>
-													Go to Organisation
-												</Button>
-											</Flex>
-										</Box>
-									</Flex>
-								</Flex>
+										{organisation.name}
+									</Heading>
+									<Button
+										as={Link}
+										to={`/org/${organisation._id}`}
+										px={2}
+										py={1}
+										bg="white"
+										fontSize="xs"
+										color="gray.900"
+										fontWeight="bold"
+										rounded="lg"
+										textTransform="uppercase"
+										_hover={{
+											bg: 'gray.200',
+										}}
+										_focus={{
+											bg: 'gray.400',
+										}}
+									>
+										Go to Organisation
+									</Button>
+								</HStack>
 							);
 						})}
 					</VStack>
