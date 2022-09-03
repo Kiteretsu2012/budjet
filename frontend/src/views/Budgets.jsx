@@ -1,26 +1,20 @@
 import { Box, Button, Flex, Heading, HStack, Text, useToast, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { Link } from 'wouter';
 import AddBudgetModal from '../components/organization-dashboard/AddBudgetModal';
 import Empty from '../components/user-dashboard/Empty';
 import api from '../utils/api';
 
 const Budgets = ({ orgID }) => {
-	console.log(orgID);
-	const [location, setLocation] = useLocation();
-	const [budgets, setBudgets] = useState([
-		{ title: 'Hello', description: 'What are you upto' },
-		{ title: 'Hello', description: 'What are you upto' },
-		{ title: 'Hello', description: 'What are you upto' },
-	]);
+	const [budgets, setBudgets] = useState([]);
 	const [isAddBudgetModalVisible, setisAddBudgetModalVisible] = useState(false);
 	const toast = useToast();
 	useEffect(() => {
 		const fetchBudgets = async () => {
 			try {
-				const res = api.get(`org/${orgID}/budgets`);
-				// setBudgets(res);
+				const res = await api.get(`org/${orgID}/budgets`);
+				setBudgets(await res.json());
 			} catch (err) {
 				toast({
 					title: 'Error',
@@ -33,10 +27,6 @@ const Budgets = ({ orgID }) => {
 		};
 		fetchBudgets();
 	}, []);
-
-	const handleClick = (budgetID) => {
-		setLocation(`/org/${orgID}/budget/${budgetID}`);
-	};
 
 	return (
 		<>
@@ -112,6 +102,8 @@ const Budgets = ({ orgID }) => {
 											<Button
 												px={2}
 												py={1}
+												as={Link}
+												to={`/budget/${budget._id}`}
 												bg="white"
 												fontSize="xs"
 												color="gray.900"
@@ -124,7 +116,6 @@ const Budgets = ({ orgID }) => {
 												_focus={{
 													bg: 'gray.400',
 												}}
-												onClick={() => handleClick(budget._id)}
 											>
 												Take a closer look
 											</Button>
