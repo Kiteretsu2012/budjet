@@ -39,7 +39,7 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 		onSubmit: async (values) => {
 			try {
 				setIsSubmitting(true);
-				const res = await api.post('/budget', { ...values, ...selected });
+				const res = await api.post(`org/${orgID}/budget`, { ...values, ...selected });
 				setIsSubmitting(false);
 				setLocation(`/org/${orgID}/budget/${res._id}`);
 			} catch (err) {
