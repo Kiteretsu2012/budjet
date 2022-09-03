@@ -85,7 +85,7 @@ export const getOrganizations = async (req, res) => {
 		const memberDocs = await Member.find({ user: userID }, { organization: 1, roles: 1 });
 		const organizationIDs = memberDocs.map((doc) => doc.organization);
 		const organizations = await Organization.find(
-			{ $in: organizationIDs },
+			{ _id: { $in: organizationIDs } },
 			{ name: 1, description: 1 }
 		);
 		res.status(200).json(

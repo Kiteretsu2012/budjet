@@ -32,6 +32,6 @@ organizationRouter.post('/team', verifyOrgAdmin, orgController.createTeam);
 // 	userController.googleAuth
 // );
 
-organizationRouter.use('/:orgID/budget/', budgetRouter);
+organizationRouter.use('/budget', budgetRouter);
 
 export default organizationRouter;

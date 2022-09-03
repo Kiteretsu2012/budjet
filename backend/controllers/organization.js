@@ -38,7 +38,7 @@ export const createOrganization = async (req, res) => {
 
 export const getOrganizationDetails = async (req, res) => {
 	try {
-		const organization = await Organization.findById(req.params.id);
+		const organization = await Organization.findById(res.locals.orgID);
 
 		res.status(200).json(organization.toObject());
 	} catch (err) {
@@ -90,7 +90,7 @@ export const deleteOrganization = async (req, res) => {
 export const createTeam = async (req, res) => {
 	try {
 		const users = await User.find(
-			{ $in: req.body.members.map(({ email }) => email) },
+			{ email: { $in: req.body.members.map(({ email }) => email) } },
 			{ _id: 1, email: 1 }
 		);
 

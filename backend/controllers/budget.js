@@ -3,12 +3,14 @@ import { logger } from '#utils';
 
 export const createBudget = async (req, res) => {
 	try {
-		new Budget({
+		const budget = new Budget({
 			title: req.body.title,
 			teams: req.body.teams,
 			organization: res.locals.orgID,
 			description: req.body.title,
 		});
+		await budget.save();
+		res.json(budget);
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });
