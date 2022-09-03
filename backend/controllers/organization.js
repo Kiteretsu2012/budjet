@@ -58,7 +58,7 @@ export const getStats = async (req, res) => {
 
 export const getBudgets = async (req, res) => {
 	try {
-		const budgets = await Budget.find({ organization: res.locals.organizationID });
+		const budgets = await Budget.find({ organization: res.locals.orgID });
 		res.status(200).json(budgets);
 	} catch (err) {
 		logger.error(err.message);
@@ -68,7 +68,7 @@ export const getBudgets = async (req, res) => {
 
 export const getTeams = async (req, res) => {
 	try {
-		const teams = await Team.find({ organization: res.locals.organizationID });
+		const teams = await Team.find({ organization: res.locals.orgID });
 		res.status(200).json(teams);
 	} catch (err) {
 		logger.error(err.message);
@@ -102,7 +102,7 @@ export const createTeam = async (req, res) => {
 
 		const members = await Member.find({
 			user: { $in: users.map(({ _id }) => _id) },
-			organization: res.locals.organizationID,
+			organization: res.locals.orgID,
 		});
 
 		if (members.length !== req.body.members.length) {
@@ -111,7 +111,7 @@ export const createTeam = async (req, res) => {
 
 		const team = new Team({
 			name: req.body.name,
-			organization: res.locals.organizationID,
+			organization: res.locals.orgID,
 			members: req.body.members.map((member) => {
 				return {
 					id: members.find(({ email, user }) => user.equals(userEmailToID[email]))._id,

@@ -1,16 +1,48 @@
 import express from 'express';
 import { budgetController } from '#controllers';
-import { verifyAuthToken, verifyOrgAdmin } from '#utils';
+import { logger, verifyAdminOrLeader, verifyTeam } from '#utils';
+import { Budget } from '#models';
 
 const budgetRouter = express.Router();
 
-// TODO: add team leader editing functionality
+const getTeamsHandlingBudget = async (req, res, next) => {
+	try {
+		const budget = await Budget.findById(req.params.budgetID);
 
-budgetRouter.post('', verifyAuthToken, verifyOrgAdmin, budgetController.createBudget);
-budgetRouter.get('/:id', verifyAuthToken, budgetController.getFullBudget);
+		res.locals.budgetTeams = budget.teams;
 
-budgetRouter.post('/:id/expense', verifyAuthToken, verifyOrgAdmin, budgetController.createExpense);
-budgetRouter.put('/expense/:id', verifyAuthToken, verifyOrgAdmin, budgetController.updateExpense);
-budgetRouter.delete('/expense/:id', verifyAuthToken, verifyOrgAdmin, budgetController.deleteBudget); // join
+		next();
+	} catch (error) {
+		logger.error(error.message, error);
+		return res.status(400).send({ message: error.message || 'Unauthorized Request' });
+	}
+};
+
+budgetRouter.post('', verifyAdminOrLeader(), budgetController.createBudget);
+budgetRouter.get(
+	'/:budgetID',
+	getTeamsHandlingBudget,
+	verifyTeam('TEAM_MEMBER'),
+	budgetController.getFullBudget
+);
+
+budgetRouter.post(
+	'/:id/expense',
+	getTeamsHandlingBudget,
+	verifyAdminOrLeader(),
+	budgetController.createExpense
+);
+budgetRouter.put(
+	'/expense/:id',
+	getTeamsHandlingBudget,
+	verifyAdminOrLeader(),
+	budgetController.updateExpense
+);
+budgetRouter.delete(
+	'/expense/:id',
+	getTeamsHandlingBudget,
+	verifyAdminOrLeader(),
+	budgetController.deleteBudget
+); // join
 
 export default budgetRouter;

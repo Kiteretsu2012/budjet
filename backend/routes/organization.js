@@ -1,43 +1,37 @@
-import { verifyAuthToken, verifyOrgAdmin, verifyTeamLeader } from '#utils';
+import { verifyOrgAdmin, verifyTeamLeader } from '#utils';
 import express from 'express';
-import { orgController, userController } from '#controllers';
+import { orgController } from '#controllers';
+import budgetRouter from './budget.js';
 
 const organizationRouter = express.Router();
 
-organizationRouter.post('', verifyAuthToken, orgController.createOrganization); // create org
-organizationRouter.get('/:id', verifyAuthToken, orgController.getOrganizationDetails);
-organizationRouter.delete(
-	'/:id',
-	verifyAuthToken,
-	verifyOrgAdmin,
-	orgController.deleteOrganization
-);
+organizationRouter.get('', orgController.getOrganizationDetails);
+organizationRouter.delete('', verifyOrgAdmin, orgController.deleteOrganization);
 
-organizationRouter.get('/:id/stats', verifyAuthToken, orgController.getStats);
-organizationRouter.get('/:id/budgets', verifyAuthToken, orgController.getBudgets);
-organizationRouter.get('/:id/teams', verifyAuthToken, orgController.getBudgets);
+organizationRouter.get('/stats', orgController.getStats);
+organizationRouter.get('/budgets', orgController.getBudgets);
+organizationRouter.get('/teams', orgController.getBudgets);
 
-organizationRouter.post('/:id/team', verifyAuthToken, verifyOrgAdmin, orgController.createTeam);
-organizationRouter.post(
-	'/team/:teamID/user/',
-	verifyAuthToken,
-	verifyOrgAdmin,
-	verifyTeamLeader,
-	userController.googleAuth
-);
-organizationRouter.put(
-	'/:id/team/:teamID/user/:userId/role',
-	verifyAuthToken,
-	verifyOrgAdmin,
-	verifyTeamLeader,
-	userController.googleAuth
-);
-organizationRouter.delete(
-	'/:id/team/:teamID/user',
-	verifyAuthToken,
-	verifyOrgAdmin,
-	verifyTeamLeader,
-	userController.googleAuth
-);
+organizationRouter.post('/team', verifyOrgAdmin, orgController.createTeam);
+// organizationRouter.post(
+// 	'/team/:teamID/user/',
+// 	verifyOrgAdmin,
+// 	verifyTeamLeader,
+// 	userController.googleAuth
+// );
+// organizationRouter.put(
+// 	'/team/:teamID/user/:userID/role',
+// 	verifyOrgAdmin,
+// 	verifyTeamLeader,
+// 	userController.googleAuth
+// );
+// organizationRouter.delete(
+// 	'/team/:teamID/user',
+// 	verifyOrgAdmin,
+// 	verifyTeamLeader,
+// 	userController.googleAuth
+// );
+
+organizationRouter.use('/:orgID/budget/', budgetRouter);
 
 export default organizationRouter;

@@ -6,7 +6,7 @@ export const createBudget = async (req, res) => {
 		new Budget({
 			title: req.body.title,
 			teams: req.body.teams,
-			organization: res.locals.organizationID,
+			organization: res.locals.orgID,
 			description: req.body.title,
 		});
 	} catch (err) {

@@ -112,7 +112,7 @@ export const checkUser = async (req, res) => {
 
 		const member = await Member.findOne({
 			user: user._id,
-			organization: res.locals.organizationID,
+			organization: res.locals.orgID,
 		});
 
 		if (!member) {
