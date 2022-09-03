@@ -1,6 +1,4 @@
-import { Button, Heading, HStack, Text } from '@chakra-ui/react';
-import React from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { Button, Heading, HStack } from '@chakra-ui/react';
 
 function DashboardRecentExpenses() {
 	return (
@@ -10,9 +8,6 @@ function DashboardRecentExpenses() {
 					Recent expenses
 				</Heading>
 				<HStack>
-					<Button bgColor={'#49B6FF'} color="white">
-						<Text pr="0.5rem">Add Expense</Text> <FaPlus style={{ opacity: '70%' }} />
-					</Button>
 					<Button bgColor={'#6EEB83'} color="white">
 						{' '}
 						Sort

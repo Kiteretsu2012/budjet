@@ -13,21 +13,19 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
+	Textarea,
 	useToast,
 } from '@chakra-ui/react';
-import { TiBusinessCard } from 'react-icons/ti';
 import { useFormik } from 'formik';
-import api from '../../utils/api';
 import { useState } from 'react';
+import { TiBusinessCard } from 'react-icons/ti';
 import { useLocation } from 'wouter';
+import api from '../../utils/api';
 
-function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
-	// const { isOpen, onOpen, onClose } = useDisclosure();
-
-	const toast = useToast();
-	const [location, setLocation] = useLocation();
-
+function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVisible }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [location, setLocation] = useLocation();
+	const toast = useToast();
 
 	const formik = useFormik({
 		initialValues: {
@@ -39,7 +37,7 @@ function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
 				setIsSubmitting(true);
 				const res = await api.post('/org', values);
 				setIsSubmitting(false);
-				setLocation(`/org/${res._id}`);
+				setLocation(`/org/${orgID}/budget/${res._id}`);
 			} catch (err) {
 				toast({
 					title: 'Error',
@@ -51,41 +49,37 @@ function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
 			}
 		},
 	});
-
 	const onClose = () => {
-		setCreateOrgModalVisible(false);
+		setIsAddBudgetModalVisible(false);
 	};
 	return (
-		<Modal isOpen={createOrgModalVisible} onClose={onClose}>
+		<Modal isOpen={isAddBudgetModalVisible} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Create an Organisation</ModalHeader>
+				<ModalHeader>Create a Budget</ModalHeader>
 				<ModalCloseButton />
 				<form onSubmit={formik.handleSubmit}>
 					<ModalBody>
 						<FormControl mb="1rem">
-							<FormLabel>Organisation Name</FormLabel>
+							<FormLabel>Budget Title</FormLabel>
 							<InputGroup>
 								<InputLeftElement pointerEvents="none">
 									<Icon as={TiBusinessCard} w={7} h={7} />
 								</InputLeftElement>
 								<Input
 									onChange={formik.handleChange}
-									name="name"
-									placeholder="Enter name of the organisation"
+									name="title"
+									placeholder="Enter title of the budget"
 								/>
 							</InputGroup>
 						</FormControl>
 						<FormControl>
-							<FormLabel>Organisation Description</FormLabel>
+							<FormLabel>Budget Description</FormLabel>
 							<InputGroup>
-								<InputLeftElement pointerEvents="none">
-									<Icon as={TiBusinessCard} w={7} h={7} />
-								</InputLeftElement>
-								<Input
+								<Textarea
 									onChange={formik.handleChange}
 									name="description"
-									placeholder="Enter description of the organisation"
+									placeholder="Enter description of the budget"
 								/>
 							</InputGroup>
 						</FormControl>
@@ -105,4 +99,4 @@ function CreateOrgModal({ createOrgModalVisible, setCreateOrgModalVisible }) {
 	);
 }
 
-export default CreateOrgModal;
+export default AddBudgetModal;

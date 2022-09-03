@@ -31,8 +31,9 @@ function App() {
 					}}
 					redirectTo="/auth"
 				/>
-				<Route path="/org/:id" component={<OrganisationDashboard />} />
-				<Route path="/" component={() => <Redirect to="/login" />} />
+				{/* <Route path="/org" component={() => <OrganisationDashboard />} /> */}
+				<Route path="/org/:id" component={() => <OrganisationDashboard />} />
+				<Route path="/" component={() => <Redirect to="/auth" />} />
 			</Switch>
 		</Router>
 	);
