@@ -1,6 +1,20 @@
-import { Box, Button, Flex, Heading, HStack, Text, useToast, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Divider,
+	Flex,
+	Grid,
+	GridItem,
+	Heading,
+	HStack,
+	Icon,
+	Text,
+	useToast,
+	VStack,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { FcOrganization, FcPodiumWithSpeaker } from 'react-icons/fc';
 import { Link } from 'wouter';
 import AddBudgetModal from '../components/organization-dashboard/AddBudgetModal';
 import Empty from '../components/user-dashboard/Empty';
@@ -30,7 +44,7 @@ const Budgets = ({ orgID }) => {
 
 	return (
 		<>
-			<HStack>
+			<HStack mb="2rem">
 				<Heading marginRight="1rem">Budgets 💸</Heading>
 				<AddBudgetModal
 					orgID={orgID}
@@ -47,48 +61,47 @@ const Budgets = ({ orgID }) => {
 			</HStack>
 			{budgets.length > 0 ? (
 				<VStack>
-					{budgets.map((budget, index) => {
-						return (
-							<HStack
-								key={index}
-								backgroundColor="black"
-								p="2rem"
-								borderRadius="1rem"
-								justify="space-between"
-							>
-								<Heading
-									fontSize="2xl"
-									fontWeight="bold"
-									color="white"
-									_dark={{
-										color: 'white',
-									}}
-								>
-									{budget.title}
-								</Heading>
-								<Button
-									as={Link}
-									to={`/org/${organisation._id}`}
-									px={2}
-									py={1}
-									bg="white"
-									fontSize="xs"
-									color="gray.900"
-									fontWeight="bold"
-									rounded="lg"
-									textTransform="uppercase"
-									_hover={{
-										bg: 'gray.200',
-									}}
-									_focus={{
-										bg: 'gray.400',
-									}}
-								>
-									Go to Organisation
-								</Button>
-							</HStack>
-						);
-					})}
+					<Grid templateColumns="repeat(5, 1fr)" gap={6}>
+						{[...budgets, ...budgets].map((budget, index) => {
+							return (
+								<GridItem key={index}>
+									<Link to={`/budget/${budget._id}`}>
+										<Flex
+											w="25%"
+											h="auto"
+											maxH="200px"
+											bg="white"
+											color="black"
+											p="1rem"
+											minW="350px"
+											style={{
+												borderRadius: '12px',
+												background: '#fff',
+											}}
+											_hover={{
+												cursor: 'pointer',
+											}}
+											direction="column"
+										>
+											<Heading
+												size="md"
+												w="100%"
+												h="auto"
+												fontSize="1.3rem"
+												mb="1rem"
+											>
+												{budget.title}
+											</Heading>
+											<Divider orientation="horizontal" w="100%" />
+											<Flex w="100%" mt="1rem">
+												{budget.description}
+											</Flex>
+										</Flex>
+									</Link>
+								</GridItem>
+							);
+						})}
+					</Grid>
 				</VStack>
 			) : (
 				<Empty emptyType="budget" />
