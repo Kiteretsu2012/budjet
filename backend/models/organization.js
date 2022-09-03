@@ -22,5 +22,5 @@ orgSchema.pre('updateOne', function updateOne(next) {
 	next();
 });
 
-const Organization = mongoose.model('user', orgSchema);
+const Organization = mongoose.model('organizations', orgSchema);
 export default Organization;

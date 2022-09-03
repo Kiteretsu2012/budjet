@@ -28,7 +28,8 @@ export const createOrganization = async (req, res) => {
 
 		session.commitTransaction();
 		await session.endSession();
-		res.status(200).json({});
+
+		res.status(200).json({ _id: newOrg._id });
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });

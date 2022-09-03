@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const memberSchema = new Schema({
-	user: mongoose.SchemaTypes.ObjectId,
-	organization: mongoose.SchemaTypes.ObjectId,
+	user: { type: mongoose.SchemaTypes.ObjectId, ref: 'users' },
+	organization: { type: mongoose.SchemaTypes.ObjectId, ref: 'users' },
 	roles: [
 		{
 			level: { type: String, enum: ['ADMIN', 'TEAM_LEADER', 'TEAM_MEMBER', 'VIEWER'] }, // viewer doesn't require login

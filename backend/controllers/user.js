@@ -71,7 +71,7 @@ export const joinOrganization = async (req, res) => {
 
 		await member.save();
 
-		res.status(200).json({});
+		res.status(200).json({ _id: organization._id });
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });
@@ -102,7 +102,7 @@ export const getOrganizations = async (req, res) => {
 
 export const checkUser = async (req, res) => {
 	try {
-		const user = await User.findOne({ email: res.locals.email });
+		const user = await User.findOne({ email: res.body.email });
 
 		if (!user) {
 			return res
