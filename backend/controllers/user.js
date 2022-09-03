@@ -99,3 +99,17 @@ export const getOrganizations = async (req, res) => {
 		res.status(500).json({ message: 'Error' });
 	}
 };
+
+export const checkUser = async (req, res) => {
+	try {
+		const user = await User.find({ email: res.locals.email });
+
+		if (!user) {
+			return res.status(404).json({ message: 'Not found' });
+		}
+		return res.status(200).json({ message: 'Found' });
+	} catch (err) {
+		logger.error(err.message);
+		res.status(500).json({ message: 'Error' });
+	}
+};
