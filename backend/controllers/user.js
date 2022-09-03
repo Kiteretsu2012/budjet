@@ -56,7 +56,7 @@ export const joinOrganization = async (req, res) => {
 		const userID = res.locals._id;
 
 		const organization = await Organization.findOne({
-			joiningCode: req.body.joiningCode,
+			joiningCode: req.params.joiningCode,
 		});
 
 		if (!organization) {

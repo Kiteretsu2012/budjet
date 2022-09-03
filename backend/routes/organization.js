@@ -1,4 +1,4 @@
-import { verifyOrgAdmin, verifyTeamLeader } from '#utils';
+import { verifyOrgAdmin } from '#utils';
 import express from 'express';
 import { orgController } from '#controllers';
 import budgetRouter from './budget.js';
