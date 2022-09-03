@@ -22,7 +22,6 @@ import {
 } from '@chakra-ui/react';
 import {
 	FiHome,
-	FiTrendingUp,
 	FiCompass,
 	FiStar,
 	FiSettings,
@@ -30,10 +29,11 @@ import {
 	FiBell,
 	FiChevronDown,
 } from 'react-icons/fi';
+import { RiTeamLine } from 'react-icons/ri';
 
 const LinkItems = [
 	{ name: 'Home', icon: FiHome },
-	{ name: 'Expenses', icon: FiTrendingUp },
+	{ name: 'Teams', icon: RiTeamLine },
 	{ name: 'Events', icon: FiCompass },
 	{ name: 'Statuses', icon: FiStar },
 	{ name: 'Create', icon: FiSettings },
