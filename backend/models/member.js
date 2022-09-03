@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const memberSchema = new Schema({
 	user: { type: mongoose.SchemaTypes.ObjectId, ref: 'users' },
-	organization: { type: mongoose.SchemaTypes.ObjectId, ref: 'users' },
+	organization: { type: mongoose.SchemaTypes.ObjectId, ref: 'organizations' },
 	roles: [
 		{
 			level: { type: String, enum: ['ADMIN', 'TEAM_LEADER', 'TEAM_MEMBER', 'VIEWER'] }, // viewer doesn't require login

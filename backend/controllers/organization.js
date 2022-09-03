@@ -119,6 +119,23 @@ export const createTeam = async (req, res) => {
 				};
 			}),
 		});
+		await team.save();
+
+		const memberUpdates = req.body.members.map((member) => {
+			return {
+				updateOne: {
+					filter: {
+						user: userEmailToID[member.email],
+						organization: res.locals.orgID,
+					},
+					update: {
+						$push: { roles: { level: member.level, team: team._id } },
+					},
+				},
+			};
+		});
+
+		await Member.bulkWrite(memberUpdates);
 
 		res.status(200).json(team.toObject());
 	} catch (err) {

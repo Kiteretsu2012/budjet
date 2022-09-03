@@ -6,7 +6,6 @@ const orgSchema = new Schema({
 	name: { type: String, unique: true },
 	description: String,
 	joiningCode: { type: String, unique: true },
-	invites: { type: [mongoose.SchemaTypes.ObjectId], ref: 'users', default: [] },
 	creator: { type: mongoose.SchemaTypes.ObjectId, ref: 'users' },
 });
 
