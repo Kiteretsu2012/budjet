@@ -1,6 +1,7 @@
 import {
 	Button,
 	FormControl,
+	FormErrorMessage,
 	FormLabel,
 	Icon,
 	Input,
@@ -21,7 +22,13 @@ import { useEffect, useState } from 'react';
 import { TiBusinessCard } from 'react-icons/ti';
 import { useLocation } from 'wouter';
 import { MultiSelect } from 'react-multi-select-component';
+import * as Yup from 'yup';
 import api from '../../utils/api';
+
+const validationSchema = Yup.object({
+	title: Yup.string().required('Required'),
+	description: Yup.string().required('Required'),
+});
 
 function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVisible }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +41,6 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 		initialValues: {
 			title: '',
 			description: '',
-			teams: [],
 		},
 		onSubmit: async (values) => {
 			try {
@@ -53,6 +59,7 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 				});
 			}
 		},
+		validationSchema,
 	});
 	const onClose = () => {
 		setIsAddBudgetModalVisible(false);
@@ -103,20 +110,24 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 								<Input
 									required
 									onChange={formik.handleChange}
+									value={formik.values.title}
 									name="title"
 									placeholder="Enter title of the budget"
 								/>
 							</InputGroup>
+							<FormErrorMessage>{formik.errors.title}</FormErrorMessage>
 						</FormControl>
 						<FormControl mb="1rem">
 							<FormLabel>Budget Description</FormLabel>
 							<InputGroup>
 								<Textarea
 									onChange={formik.handleChange}
+									value={formik.values.description}
 									name="description"
 									placeholder="Enter description of the budget"
 								/>
 							</InputGroup>
+							<FormErrorMessage>{formik.errors.description}</FormErrorMessage>
 						</FormControl>
 						<FormControl>
 							<FormLabel>Teams Involved</FormLabel>

@@ -1,16 +1,4 @@
-import {
-	Flex,
-	Text,
-	Divider,
-	Heading,
-	Icon,
-	Accordion,
-	AccordionIcon,
-	AccordionButton,
-	AccordionItem,
-	AccordionPanel,
-	Box,
-} from '@chakra-ui/react';
+import { Button, Flex, Text, Divider, Heading, Icon, Box } from '@chakra-ui/react';
 import { FcOrganization, FcPodiumWithSpeaker } from 'react-icons/fc';
 
 const TeamCard = ({ teamName, organization, members }) => {
@@ -32,10 +20,10 @@ const TeamCard = ({ teamName, organization, members }) => {
 			direction="column"
 		>
 			<Heading size="md" w="100%" h="auto" fontSize="1.3rem">
-				Linux Mint
+				{teamName}
 			</Heading>
 			<Divider orientation="horizontal" w="100%" />
-			<Flex gap="40px">
+			<Flex gap="40px" mt="10px">
 				<Flex direction="column">
 					<Text color="gray.400" mt="5%" fontSize="1rem">
 						<Icon as={FcOrganization} /> Organization:
@@ -49,19 +37,9 @@ const TeamCard = ({ teamName, organization, members }) => {
 					<Text textAlign="center">{members.length}</Text>
 				</Flex>
 			</Flex>
-			<Accordion allowToggle>
-				<AccordionItem>
-					<h2>
-						<AccordionButton>
-							<Box flex="1" textAlign="left">
-								Show all members
-							</Box>
-							<AccordionIcon />
-						</AccordionButton>
-					</h2>
-					<AccordionPanel pb={4}>{members.map((elem) => elem.name)}</AccordionPanel>
-				</AccordionItem>
-			</Accordion>{' '}
+			<Flex w="100%" justifyContent="end">
+				<Button variant="outline">View Members</Button>
+			</Flex>
 		</Flex>
 	);
 };
