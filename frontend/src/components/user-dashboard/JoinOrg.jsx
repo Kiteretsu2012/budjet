@@ -31,7 +31,7 @@ function JoinOrg() {
 			try {
 				setIsSubmitting(true);
 				console.log(values);
-				const res = await api.put('user/join/org', values);
+				const res = await api.put(`user/join/org/${values.joiningCode}`, values);
 				setIsSubmitting(false);
 				if (res?.token) {
 					localStorage.setItem('AUTH_TOKEN', res.token);

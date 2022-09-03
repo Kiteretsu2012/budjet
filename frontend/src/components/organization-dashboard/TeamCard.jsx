@@ -32,10 +32,10 @@ const TeamCard = ({ teamName, organization, members }) => {
 			direction="column"
 		>
 			<Heading size="md" w="100%" h="auto" fontSize="1.3rem">
-				Linux Mint
+				{teamName}
 			</Heading>
 			<Divider orientation="horizontal" w="100%" />
-			<Flex gap="40px">
+			<Flex gap="40px" mt="10px">
 				<Flex direction="column">
 					<Text color="gray.400" mt="5%" fontSize="1rem">
 						<Icon as={FcOrganization} /> Organization:
