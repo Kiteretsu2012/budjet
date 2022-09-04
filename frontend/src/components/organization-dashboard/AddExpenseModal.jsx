@@ -17,6 +17,7 @@ import {
 	Textarea,
 	useToast,
 	Flex,
+	SelectField,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -24,6 +25,7 @@ import { TiBusinessCard } from 'react-icons/ti';
 import { useLocation } from 'wouter';
 import * as Yup from 'yup';
 import api from '../../utils/api';
+import { makeS3UploadData, upload } from '../../utils/S3';
 
 const validationSchema = Yup.object({
 	title: Yup.string().required('Required'),
@@ -40,7 +42,8 @@ function AddExpenseModal({
 	setExpenses,
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [location, setLocation] = useLocation();
+	const [selectedFile, setSelectedFile] = useState(null);
+
 	const toast = useToast();
 
 	const formik = useFormik({
@@ -54,11 +57,12 @@ function AddExpenseModal({
 		onSubmit: async (values) => {
 			try {
 				const budgetID = window.location.pathname.split('/')[4];
-				console.log('in2');
 				setIsSubmitting(true);
+				const URL = await upload(selectedFile);
 				const parsedValues = {
 					...values,
 					amount: { A: values.A, B: values.B, C: values.C },
+					invoice: URL,
 				};
 				delete parsedValues.A;
 				delete parsedValues.B;
@@ -176,6 +180,20 @@ function AddExpenseModal({
 							</InputGroup>
 							<FormErrorMessage>{formik.errors.C}</FormErrorMessage>
 						</FormControl>
+						<FormControl mb="1rem">
+							<FormLabel>Invoice</FormLabel>
+							<Input
+								onChange={(e) => {
+									setSelectedFile(e.target.files[0]);
+								}}
+								multiple={false}
+								type="file"
+								accept="application/pdf"
+								name="invoice"
+								placeholder="Enter amount of the expense"
+							/>
+						</FormControl>
+
 						<Flex justify="end">
 							<Button
 								colorScheme="blue"

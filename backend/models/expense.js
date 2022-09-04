@@ -12,7 +12,7 @@ const expenseSchema = new Schema({
 		C: Number,
 	},
 	tags: { type: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'tags' }], default: [] },
-	invoice: { type: String, get: (val) => process.env.AWS_BUCKET_URL + '/' + val },
+	invoice: { type: String },
 
 	lastUpdated: Date,
 	createdAt: Date,
