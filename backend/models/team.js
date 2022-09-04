@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const teamSchema = new Schema({
 	name: { type: String },
-	organization: mongoose.SchemaTypes.ObjectId,
+	organization: { type: mongoose.SchemaTypes.ObjectId, ref: 'organization' },
 });
 
 teamSchema.index({ name: 1, organization: 1 }, { unique: true });
