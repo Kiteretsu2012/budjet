@@ -33,6 +33,7 @@ function App() {
 				/>
 				<Route path="/" component={() => <Redirect to="/auth" />} />
 				<OrganisationDashboard />
+				<Route path="/budget/:id" component={() => 'hi'} />
 			</Switch>
 		</Router>
 	);

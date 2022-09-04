@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { Budget, Member, Organization, Team, User } from '#models';
+import { Budget, Expense, Member, Organization, Team, User } from '#models';
 import { logger } from '#utils';
 import mongoose from 'mongoose';
 
@@ -49,7 +49,19 @@ export const getOrganizationDetails = async (req, res) => {
 
 export const getStats = async (req, res) => {
 	try {
-		res.status(200).json([]);
+		const recentExpenses = await Expense.find().sort({ lastUpdated: -1 }).limit(10);
+
+		const tagWise = await Expense.aggregate([
+			{ $project: { _id: 0, tags: 1, 'amounts.A': 1 } },
+			{ $unwind: '$tags' },
+			{ $group: { _id: '$tags', amount: { $sum: 'amounts.A' } } },
+			{ $project: { _id: 0, tags: '$_id' } },
+		]);
+
+		res.status(200).json({
+			recentExpenses,
+			tagWise,
+		});
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });
@@ -72,6 +84,7 @@ export const getTeams = async (req, res) => {
 			'organization',
 			'name'
 		);
+
 		res.status(200).json(teams);
 	} catch (err) {
 		logger.error(err.message);
@@ -92,15 +105,20 @@ export const deleteOrganization = async (req, res) => {
 
 export const createTeam = async (req, res) => {
 	try {
+		const membersData = req.body.members;
+		membersData.push({
+			email: res.locals.email,
+			level: 'TEAM_LEADER',
+		});
 		const users = await User.find(
-			{ email: { $in: req.body.members.map(({ email }) => email) } },
+			{ email: { $in: membersData.map(({ email }) => email) } },
 			{ _id: 1, email: 1 }
 		);
 		const userIDs = users.map(({ _id }) => _id);
 
 		const userEmailToID = Object.fromEntries(users.map(({ email, _id }) => [email, _id]));
 
-		if (userIDs.length !== req.body.members.length) {
+		if (userIDs.length !== membersData.length) {
 			return res.status(404).json({ message: "Some E-Mails don't have BudJet account." });
 		}
 
@@ -109,7 +127,7 @@ export const createTeam = async (req, res) => {
 			organization: res.locals.orgID,
 		});
 
-		if (members.length !== req.body.members.length) {
+		if (members.length !== membersData.length) {
 			return res.status(404).json({ message: "Some E-Mails aren't in the organization." });
 		}
 
@@ -119,7 +137,7 @@ export const createTeam = async (req, res) => {
 		});
 		await team.save();
 
-		const memberUpdates = req.body.members.map((member) => {
+		const memberUpdates = membersData.map((member) => {
 			return {
 				updateOne: {
 					filter: {

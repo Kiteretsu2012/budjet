@@ -14,10 +14,11 @@ const verifyBudgetAccess = async (req, res, next) => {
 
 			return next();
 		}
-
-		const isTeamParticipant = res.locals.member.roles.some(({ team }) =>
-			(budget.teams ?? []).some(team.equals)
-		);
+		const isTeamParticipant = res.locals.member.roles.some(({ team }) => {
+			if (!team) {
+				return (budget.teams ?? []).some(team.equals);
+			}
+		});
 
 		if (!isTeamParticipant) {
 			return res.status(400).send({ message: 'Not in team' });

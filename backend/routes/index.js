@@ -40,7 +40,7 @@ apiRouter.get('/budget/:id', verifyAuthToken, async (req, res) => {
 
 apiRouter.get('/s3-signed-policy', (req, res) => {
 	try {
-		const signedPolicy = new S3SignedPolicy('linux-mint-gang');
+		const signedPolicy = new S3SignedPolicy(process.env.AWS_BUCKET);
 		return res.json(signedPolicy);
 	} catch (error) {
 		logger.error(error.message, error);
