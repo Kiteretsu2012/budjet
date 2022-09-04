@@ -14,7 +14,7 @@ const main = async () => {
 	app.use(
 		cors({
 			credentials: true,
-			origin: ['http://localhost:3000', 'https://frontend-v04k.onrender.com'],
+			origin: ['http://localhost:3000', 'https://budjet.me', 'https://api.budjet.me'],
 		})
 	);
 

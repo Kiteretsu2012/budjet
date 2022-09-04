@@ -1,5 +1,9 @@
 import ky from 'ky';
 
+const isInProduction = import.meta.env.PROD;
+
+const prefixUrl = isInProduction ? 'https://api.budjet.me' : 'http://localhost:5000';
+
 const kyInstance = ky.create({
 	hooks: {
 		beforeRequest: [
@@ -11,7 +15,7 @@ const kyInstance = ky.create({
 		],
 	},
 	credentials: 'include',
-	prefixUrl: 'http://localhost:5000/',
+	prefixUrl,
 });
 
 const api = {
