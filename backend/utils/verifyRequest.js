@@ -59,13 +59,14 @@ export const verifyOrgAdmin = async (req, res, next) => {
 /**
  * @type {express.Handler}
  */
-export const verifyTeam = async (req, res, next) => {
+export const verifyAdminOrLeader = async (req, res, next) => {
 	try {
-		const isTeamParticipant = res.locals.member.roles.some(({ team }) =>
-			res.locals.budgetTeams.some(team.equals)
+		const isAdminOrLeader = res.locals.member.roles.some(
+			({ level }) => level === 'ADMIN' || level === 'TEAM_LEADER'
 		);
-		if (!isTeamParticipant) {
-			return res.status(400).send({ message: 'Not in team' });
+
+		if (!isAdminOrLeader) {
+			return res.status(400).send({ message: 'Not allowed' });
 		}
 		return next();
 	} catch (error) {
@@ -73,28 +74,3 @@ export const verifyTeam = async (req, res, next) => {
 		return res.status(400).send({ message: error.message || 'Unauthorized Request' });
 	}
 };
-
-/**
- * @returns {express.Handler}
- */
-export const verifyAdminOrLeader =
-	(teams = []) =>
-	async (req, res, next) => {
-		try {
-			if (res.locals.budgetTeams) {
-				teams = res.locals.budgetTeams;
-			}
-			const isOrgAdmin = res.locals.member.roles.some(({ level }) => level === 'ADMIN');
-			const isTeamLeader = res.locals.member.roles.some(
-				({ level, team }) => level === 'TEAM_LEADER' && teams.some(team.equals)
-			);
-
-			if (!isTeamLeader && !isOrgAdmin) {
-				return res.status(400).send({ message: 'Not allowed' });
-			}
-			return next();
-		} catch (error) {
-			logger.error(error.message, error);
-			return res.status(400).send({ message: error.message || 'Unauthorized Request' });
-		}
-	};
