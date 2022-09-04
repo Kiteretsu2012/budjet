@@ -28,8 +28,7 @@ const TeamTable = () => {
 			/>
 			<HStack justifyContent="end" w="100%">
 				<Button
-					bg="#FE5C5C"
-					color="white"
+					colorScheme="red"
 					onClick={() => {
 						setIsOpen((prevState) => !prevState);
 					}}
@@ -37,11 +36,10 @@ const TeamTable = () => {
 					Add Team
 				</Button>
 			</HStack>
-			<Flex w="100%" h="100vh" bg="#F1F1F1">
+			<Flex w="100%" h="100vh" bg="#F1F1F1" gap="2rem">
 				{teamsData?.map(({ name, organization }) => (
-					<TeamCard teamName={name} organization={organization} key={name} />
+					<TeamCard teamName={name} organization={organization.name} key={name} />
 				))}
-				<TeamCard teamName="Linux Mint" organization="Nvidia" members={[]} />
 			</Flex>
 		</VStack>
 	);

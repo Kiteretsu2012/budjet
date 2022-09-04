@@ -36,7 +36,7 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 	const [teams, setTeams] = useState([]);
 	const [selected, setSelected] = useState([]);
 	const toast = useToast();
-
+	console.log(teams);
 	const formik = useFormik({
 		initialValues: {
 			title: '',
@@ -68,7 +68,7 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 	useEffect(() => {
 		const fetchTeams = async () => {
 			try {
-				const res = await api.get(`org/${orgID}/teams`);
+				const res = await api.get(`org/${orgID}/teams`).json();
 				const teams =
 					res.length > 0
 						? res.map((team) => {

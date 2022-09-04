@@ -106,10 +106,12 @@ export const deleteOrganization = async (req, res) => {
 export const createTeam = async (req, res) => {
 	try {
 		const membersData = req.body.members;
-		membersData.push({
-			email: res.locals.email,
-			level: 'TEAM_LEADER',
-		});
+		if (membersData.every(({ email }) => email !== res.locals.email)) {
+			membersData.push({
+				email: res.locals.email,
+				level: 'TEAM_LEADER',
+			});
+		}
 		const users = await User.find(
 			{ email: { $in: membersData.map(({ email }) => email) } },
 			{ _id: 1, email: 1 }

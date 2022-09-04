@@ -62,7 +62,7 @@ const Budgets = ({ orgID }) => {
 			{budgets.length > 0 ? (
 				<VStack>
 					<Grid templateColumns="repeat(5, 1fr)" gap={6}>
-						{[...budgets, ...budgets].map((budget, index) => {
+						{budgets.map((budget, index) => {
 							return (
 								<GridItem key={index}>
 									<Link to={`/budget/${budget._id}`}>

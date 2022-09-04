@@ -45,11 +45,12 @@ const roleDisplayMap = {
 	TEAM_LEADER: 'Team Leader',
 };
 
-const CreateTeamModal = ({ isOpen, onClose }) => {
+const CreateTeamModal = ({ isOpen, onClose, setTeamsData }) => {
 	const orgID = getCurrentOrgID();
 	const toast = useToast();
 	const [teamMembers, setTeamMembers] = useState([]);
 	const [formData, setFormData] = useState({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	useEffect(() => {
 		setFormData((prevState) => ({ ...prevState, members: teamMembers }));
 	}, [teamMembers]);
@@ -81,9 +82,14 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 	const createTeam = async () => {
 		if (teamMembers.length) {
 			try {
-				const res = await api.post('org/' + orgID + '/team', formData);
+				setIsSubmitting(true);
+				const res = await (await api.post('org/' + orgID + '/team', formData)).json();
+				setTeamsData((oldValue) => [...oldValue, res]);
+				onClose();
 			} catch (err) {
-				const message = JSON.parse(await err.response.text()).message;
+				console.debug(err);
+
+				const message = JSON.parse(await err.response.json()).message;
 				toast({
 					title: 'Error',
 					description: message,
@@ -91,6 +97,8 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 					duration: 9000,
 					isClosable: true,
 				});
+			} finally {
+				setIsSubmitting(false);
 			}
 		} else {
 			toast({

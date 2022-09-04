@@ -1,21 +1,19 @@
-import { Button, Flex, Text, Divider, Heading, Icon } from '@chakra-ui/react';
+import { Button, Flex, Text, Divider, Heading, Icon, GridItem } from '@chakra-ui/react';
 import { FcOrganization, FcPodiumWithSpeaker } from 'react-icons/fc';
 
 const TeamCard = ({ teamName, organization, members }) => {
 	return (
-		<Flex
-			w="25%"
+		<GridItem
 			h="auto"
 			maxH="200px"
-			bg="white"
+			bg="blackAlpha.100"
 			color="black"
-			pt="20px"
-			pl="10px"
+			p="1rem"
 			minW="350px"
 			style={{
 				borderRadius: '12px',
 				background: '#fff',
-				boxShadow: '20px 20px 60px #cdcdcd, -20px -20px 60px #ffffff',
+				// boxShadow: '20px 20px 60px #cdcdcd, -20px -20px 60px #ffffff',
 			}}
 			direction="column"
 		>
@@ -26,15 +24,9 @@ const TeamCard = ({ teamName, organization, members }) => {
 			<Flex gap="40px" mt="10px">
 				<Flex direction="column">
 					<Text color="gray.400" mt="5%" fontSize="1rem">
-						<Icon as={FcOrganization} /> Organization:
+						Organization:
 					</Text>
 					<Text textAlign="center">{organization}</Text>
-				</Flex>
-				<Flex direction="column">
-					<Text color="gray.400" mt="5%" fontSize="1rem">
-						<Icon as={FcPodiumWithSpeaker} /> No. Of Members
-					</Text>
-					<Text textAlign="center">{members?.length}</Text>
 				</Flex>
 			</Flex>
 			<Flex w="100%" justifyContent="center" mt="20px">
@@ -42,7 +34,7 @@ const TeamCard = ({ teamName, organization, members }) => {
 					View Members
 				</Button>
 			</Flex>
-		</Flex>
+		</GridItem>
 	);
 };
 
