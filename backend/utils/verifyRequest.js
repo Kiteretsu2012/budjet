@@ -59,10 +59,10 @@ export const verifyOrgAdmin = async (req, res, next) => {
 /**
  * @type {express.Handler}
  */
-export const verifyTeam = (requiredLevel) => async (req, res, next) => {
+export const verifyTeam = async (req, res, next) => {
 	try {
-		const isTeamParticipant = res.locals.member.roles.some(
-			({ level, team }) => level === requiredLevel && res.locals.budgetTeams.some(team.equals)
+		const isTeamParticipant = res.locals.member.roles.some(({ team }) =>
+			res.locals.budgetTeams.some(team.equals)
 		);
 		if (!isTeamParticipant) {
 			return res.status(400).send({ message: 'Not in team' });

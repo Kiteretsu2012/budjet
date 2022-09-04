@@ -19,12 +19,7 @@ const getTeamsHandlingBudget = async (req, res, next) => {
 };
 
 budgetRouter.post('', verifyAdminOrLeader(), budgetController.createBudget);
-budgetRouter.get(
-	'/:budgetID',
-	getTeamsHandlingBudget,
-	verifyTeam('TEAM_MEMBER'),
-	budgetController.getFullBudget
-);
+budgetRouter.get('/:budgetID', getTeamsHandlingBudget, verifyTeam, budgetController.getFullBudget);
 
 budgetRouter.post(
 	'/:id/expense',
