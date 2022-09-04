@@ -12,6 +12,7 @@ const expenseSchema = new Schema({
 		C: Number,
 	},
 	tags: { type: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'tags' }], default: [] },
+	invoice: { type: String },
 });
 
 expenseSchema.pre('save', function save(next) {

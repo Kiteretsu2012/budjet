@@ -7,6 +7,7 @@ const budgetSchema = new Schema({
 	organization: { type: mongoose.SchemaTypes.ObjectId, ref: 'organizations' },
 	description: String,
 	teams: { type: mongoose.SchemaTypes.ObjectId, ref: 'teams' },
+	approvers: [{ email: String, approved: Boolean }],
 });
 
 budgetSchema.pre('save', function save(next) {
