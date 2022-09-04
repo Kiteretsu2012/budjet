@@ -17,6 +17,7 @@ const TeamTable = () => {
 		};
 		dataFetcher();
 	}, []);
+	console.log(teamsData);
 	return (
 		<VStack>
 			<CreateTeamModal

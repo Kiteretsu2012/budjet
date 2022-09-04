@@ -14,16 +14,18 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
+import AddExpenseModal from '../components/organization-dashboard/AddExpenseModal';
 
 const BudgetTable = () => {
 	const toast = useToast();
 	const [expenses, setExpenses] = useState([]);
+	const [isAddExpenseModalVisible, setIsAddExpenseModalVisible] = useState(false);
 	useEffect(() => {
 		const dataFetcher = async () => {
 			const orgID = window.location.pathname.split('/')[2];
 			const expenseID = window.location.pathname.split('/')[4];
 			try {
-				const res = await api.get(`budget/${expenseID}`).json();
+				const res = await api.get(`org/${orgID}/budget/${expenseID}`).json();
 				setExpenses(res);
 			} catch (err) {
 				const message = JSON.parse(await err.response.text()).message;
@@ -41,10 +43,19 @@ const BudgetTable = () => {
 	return (
 		<>
 			<Flex justify="end">
+				<AddExpenseModal
+					orgID={window.location.pathname.split('/')[2]}
+					isAddExpenseModalVisible={isAddExpenseModalVisible}
+					setIsAddExpenseModalVisible={setIsAddExpenseModalVisible}
+					setExpenses={setExpenses}
+				/>
 				<Button
 					bg="#14ee10"
 					_hover={{
 						bg: '#0Ae406',
+					}}
+					onClick={() => {
+						setIsAddExpenseModalVisible(true);
 					}}
 					color="white"
 					mb="20px"
