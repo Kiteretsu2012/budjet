@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const teamSchema = new Schema({
 	name: { type: String },
 	organization: { type: mongoose.SchemaTypes.ObjectId, ref: 'organizations' },
+	members: { type: mongoose.SchemaTypes.ObjectId, ref: 'members' },
 });
 
 teamSchema.index({ name: 1, organization: 1 }, { unique: true });
