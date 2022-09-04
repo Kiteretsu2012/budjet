@@ -26,7 +26,8 @@ const BudgetTable = () => {
 			const expenseID = window.location.pathname.split('/')[4];
 			try {
 				const res = await api.get(`org/${orgID}/budget/${expenseID}`).json();
-				setExpenses(res);
+				console.log(res);
+				setExpenses(res.expenses);
 			} catch (err) {
 				const message = JSON.parse(await err.response.text()).message;
 				toast({
@@ -40,6 +41,7 @@ const BudgetTable = () => {
 		};
 		dataFetcher();
 	}, []);
+	console.log(expenses);
 	return (
 		<>
 			<Flex justify="end">

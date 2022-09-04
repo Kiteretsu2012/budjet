@@ -16,6 +16,7 @@ import {
 	ModalOverlay,
 	Textarea,
 	useToast,
+	Flex,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -28,8 +29,8 @@ const validationSchema = Yup.object({
 	title: Yup.string().required('Required'),
 	description: Yup.string().required('Required'),
 	A: Yup.number().required('Required'),
-	B: Yup.number().required('Required'),
-	C: Yup.number().required('Required'),
+	B: Yup.number(),
+	C: Yup.number(),
 });
 
 function AddExpenseModal({
@@ -49,10 +50,11 @@ function AddExpenseModal({
 			A: '',
 			B: '',
 			C: '',
-			tags: [],
 		},
 		onSubmit: async (values) => {
 			try {
+				const budgetID = window.location.pathname.split('/')[4];
+				console.log('in2');
 				setIsSubmitting(true);
 				const parsedValues = {
 					...values,
@@ -61,7 +63,7 @@ function AddExpenseModal({
 				delete parsedValues.A;
 				delete parsedValues.B;
 				delete parsedValues.C;
-				const res = await api.post(`org/${orgID}/budget`, parsedValues);
+				const res = await api.post(`org/${orgID}/budget/${budgetID}/expense`, parsedValues);
 				setIsSubmitting(false);
 				setIsAddExpenseModalVisible(false);
 				setExpenses((oldValue) => [...oldValue, res]);
@@ -89,8 +91,8 @@ function AddExpenseModal({
 			<ModalContent>
 				<ModalHeader>Create an Expense</ModalHeader>
 				<ModalCloseButton />
-				<form onSubmit={formik.handleSubmit}>
-					<ModalBody>
+				<ModalBody>
+					<form onSubmit={formik.handleSubmit}>
 						<FormControl mb="1rem">
 							<FormLabel>Expense Title</FormLabel>
 							<InputGroup>
@@ -101,6 +103,7 @@ function AddExpenseModal({
 									required
 									onChange={formik.handleChange}
 									value={formik.values.title}
+									onBlur={formik.handleBlur}
 									name="title"
 									placeholder="Enter title of the expense"
 								/>
@@ -113,6 +116,7 @@ function AddExpenseModal({
 								<Textarea
 									onChange={formik.handleChange}
 									value={formik.values.description}
+									onBlur={formik.handleBlur}
 									name="description"
 									placeholder="Enter description of the expense"
 								/>
@@ -148,6 +152,7 @@ function AddExpenseModal({
 								<Input
 									onChange={formik.handleChange}
 									value={formik.values.B}
+									onBlur={formik.handleBlur}
 									name="B"
 									placeholder="Enter amount of the expense"
 								/>
@@ -171,17 +176,25 @@ function AddExpenseModal({
 							</InputGroup>
 							<FormErrorMessage>{formik.errors.C}</FormErrorMessage>
 						</FormControl>
-					</ModalBody>
-
-					<ModalFooter>
-						<Button colorScheme="blue" mr={3} type="submit" isLoading={isSubmitting}>
-							Create
-						</Button>
-						<Button variant="ghost" onClick={onClose}>
-							Close
-						</Button>
-					</ModalFooter>
-				</form>
+						<Flex justify="end">
+							<Button
+								colorScheme="blue"
+								mr={3}
+								type="submit"
+								onClick={() => {
+									console.log('in');
+									formik.handleSubmit();
+								}}
+								isLoading={isSubmitting}
+							>
+								Create
+							</Button>
+							<Button variant="ghost" onClick={onClose}>
+								Close
+							</Button>
+						</Flex>
+					</form>
+				</ModalBody>
 			</ModalContent>
 		</Modal>
 	);

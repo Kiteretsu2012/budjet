@@ -153,7 +153,7 @@ const CreateTeamModal = ({ isOpen, onClose, setTeamsData }) => {
 										</Flex>
 										<Flex direction="column">
 											<FormLabel>Role of Team Member {index + 1}</FormLabel>
-											<Input value={level} disabled />
+											<Input value={roleDisplayMap[level]} disabled />
 										</Flex>
 										<Button
 											bg="#FE5C5C"
