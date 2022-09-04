@@ -39,9 +39,8 @@ const TeamTable = () => {
 			</HStack>
 			<Flex w="100%" h="100vh" bg="#F1F1F1">
 				{teamsData?.map(({ name, organization }) => (
-					<TeamCard teamName={name} organization={organization} key={name} />
+					<TeamCard teamName={name} organization={organization.name} key={name} />
 				))}
-				<TeamCard teamName="Linux Mint" organization="Nvidia" members={[]} />
 			</Flex>
 		</VStack>
 	);
