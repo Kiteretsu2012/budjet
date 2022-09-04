@@ -83,12 +83,12 @@ const CreateTeamModal = ({ isOpen, onClose, setTeamsData }) => {
 		if (teamMembers.length) {
 			try {
 				setIsSubmitting(true);
-				const res = await (await api.post('org/' + orgID + '/team', formData)).json();
-				setTeamsData((oldValue) => [...oldValue, res]);
+				const res = await api.post('org/' + orgID + '/team', formData);
+				setTeamMembers((oldValue) => [...oldValue, res]);
 				onClose();
+				window.location.reload();
 			} catch (err) {
-				console.debug(err);
-
+				console.log(err?.response?.json() || err);
 				const message = JSON.parse(await err.response.json()).message;
 				toast({
 					title: 'Error',
