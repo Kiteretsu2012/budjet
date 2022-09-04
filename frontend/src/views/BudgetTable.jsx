@@ -11,15 +11,19 @@ import {
 	useToast,
 	Button,
 	Flex,
+	Icon,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 import AddExpenseModal from '../components/organization-dashboard/AddExpenseModal';
+import { BiEditAlt } from 'react-icons/bi';
 
 const BudgetTable = () => {
 	const toast = useToast();
 	const [expenses, setExpenses] = useState([]);
 	const [isAddExpenseModalVisible, setIsAddExpenseModalVisible] = useState(false);
+	const [isEditExpenseModalVisible, setIsEditExpenseModalVisible] = useState(false);
+	const [editInitData, setEditInitData] = useState({});
 	useEffect(() => {
 		const dataFetcher = async () => {
 			const orgID = window.location.pathname.split('/')[2];
@@ -49,6 +53,9 @@ const BudgetTable = () => {
 					orgID={window.location.pathname.split('/')[2]}
 					isAddExpenseModalVisible={isAddExpenseModalVisible}
 					setIsAddExpenseModalVisible={setIsAddExpenseModalVisible}
+					isEditExpenseModalVisible={isEditExpenseModalVisible}
+					setIsEditExpenseModalVisible={setIsEditExpenseModalVisible}
+					editInitData={editInitData}
 					setExpenses={setExpenses}
 				/>
 				<Button
@@ -81,6 +88,7 @@ const BudgetTable = () => {
 							<Th>Plan-A</Th>
 							<Th>Plan-B</Th>
 							<Th>Plan-C</Th>
+							<Th>Edit</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
@@ -91,6 +99,23 @@ const BudgetTable = () => {
 								<Td>{A}</Td>
 								<Td>{B}</Td>
 								<Td>{C}</Td>
+								<Td>
+									<Button
+										variant="outline"
+										onClick={() => {
+											setEditInitData({
+												title,
+												description,
+												A,
+												B,
+												C,
+											});
+											setIsEditExpenseVisible(true);
+										}}
+									>
+										<Icon as={BiEditAlt} />
+									</Button>
+								</Td>
 							</Tr>
 						))}
 					</Tbody>

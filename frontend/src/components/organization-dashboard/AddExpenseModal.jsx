@@ -38,19 +38,27 @@ function AddExpenseModal({
 	isAddExpenseModalVisible,
 	setIsAddExpenseModalVisible,
 	setExpenses,
+	isEditExpenseModalVisible,
+	setIsEditExpenseModalVisible,
+	editInitData,
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [location, setLocation] = useLocation();
 	const toast = useToast();
+	console.log(isEditExpenseModalVisible);
+	console.log(setIsEditExpenseModalVisible);
+	console.log(editInitData);
 
 	const formik = useFormik({
-		initialValues: {
-			title: '',
-			description: '',
-			A: '',
-			B: '',
-			C: '',
-		},
+		initialValues: isAddExpenseModalVisible
+			? {
+					title: '',
+					description: '',
+					A: '',
+					B: '',
+					C: '',
+			  }
+			: editInitData,
 		onSubmit: async (values) => {
 			try {
 				const budgetID = window.location.pathname.split('/')[4];
@@ -82,11 +90,12 @@ function AddExpenseModal({
 	});
 	const onClose = () => {
 		setIsAddExpenseModalVisible(false);
+		setIsEditExpenseModalVisible(false);
 		setIsSubmitting(false);
 	};
 
 	return (
-		<Modal isOpen={isAddExpenseModalVisible} onClose={onClose}>
+		<Modal isOpen={isAddExpenseModalVisible || isEditExpenseModalVisible} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Create an Expense</ModalHeader>
