@@ -9,6 +9,12 @@ const verifyBudgetAccess = async (req, res, next) => {
 	try {
 		const budget = await Budget.findById(req.params.budgetID);
 
+		if (res.locals.member.roles.some(({ level }) => level === 'ADMIN')) {
+			res.locals.budgetID = req.params.budgetID;
+
+			return next();
+		}
+
 		const isTeamParticipant = res.locals.member.roles.some(({ team }) =>
 			(budget.teams ?? []).some(team.equals)
 		);
@@ -16,6 +22,8 @@ const verifyBudgetAccess = async (req, res, next) => {
 		if (!isTeamParticipant) {
 			return res.status(400).send({ message: 'Not in team' });
 		}
+
+		res.locals.budgetID = req.params.budgetID;
 		return next();
 	} catch (error) {
 		logger.error(error.message, error);
@@ -26,8 +34,16 @@ const verifyBudgetAccess = async (req, res, next) => {
 budgetRouter.post('', verifyAdminOrLeader, budgetController.createBudget);
 budgetRouter.get('/:budgetID', verifyBudgetAccess, budgetController.getFullBudget);
 
-budgetRouter.post('/:id/expense', verifyBudgetAccess, budgetController.createExpense);
-budgetRouter.put('/expense/:id', verifyBudgetAccess, budgetController.updateExpense);
-budgetRouter.delete('/expense/:id', verifyBudgetAccess, budgetController.deleteBudget); // join
+budgetRouter.post('/:budgetID/expense', verifyBudgetAccess, budgetController.createExpense);
+budgetRouter.put(
+	'/:budgetID/expense/:expenseID',
+	verifyBudgetAccess,
+	budgetController.updateExpense
+);
+budgetRouter.delete(
+	'/:budgetID/expense/:expenseID',
+	verifyBudgetAccess,
+	budgetController.deleteBudget
+); // join
 
 export default budgetRouter;

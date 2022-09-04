@@ -19,7 +19,7 @@ export const createBudget = async (req, res) => {
 
 export const getFullBudget = async (req, res) => {
 	try {
-		const budget = await Budget.findById(req.params.id);
+		const budget = await Budget.findById(res.locals.budgetID);
 		if (!budget) {
 			return res.status(404).json({ message: 'Budget not found.' });
 		}
@@ -39,7 +39,7 @@ export const getFullBudget = async (req, res) => {
 
 export const deleteBudget = async (req, res) => {
 	try {
-		await Budget.findByIdAndDelete(req.params.id);
+		await Budget.findByIdAndDelete(res.locals.budgetID);
 
 		res.status(200).json({});
 	} catch (err) {
@@ -53,7 +53,7 @@ export const createExpense = async (req, res) => {
 		const expense = new Expense({
 			title: req.body.title,
 			description: req.body.description,
-			budget: req.params.budgetID,
+			budget: res.locals.budgetID,
 			amounts: req.body.amounts,
 		});
 		await expense.save();
