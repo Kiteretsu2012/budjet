@@ -52,7 +52,7 @@ export const createExpense = async (req, res) => {
 	try {
 		const expense = new Expense({
 			title: req.body.title,
-			description: req.body.title,
+			description: req.body.description,
 			budget: req.params.budgetID,
 			amounts: req.body.amounts,
 		});
@@ -80,6 +80,38 @@ export const deleteExpense = async (req, res) => {
 	try {
 		await Expense.findByIdAndDelete(req.params.id);
 		res.status(200).json({});
+	} catch (err) {
+		logger.error(err.message);
+		res.status(500).json({ message: 'Error' });
+	}
+};
+
+export const approveBudget = async (req, res) => {
+	try {
+		const budgetID = req.params.id;
+		const budget = await Budget.findById(budgetID);
+
+		const isApprover = budget.approvers.some(({ email }) => email === res.locals.email);
+		if (!isApprover) {
+			return res.status(401);
+		}
+
+		if (!budget) {
+			return res.status(404).json({ message: 'Budget not found.' });
+		}
+		budget.approvers = budget.approvers.map((ap) =>
+			ap.email === res.locals.email ? { ...ap, approved: true } : ap
+		);
+
+		await budget.save();
+
+		const budgetPojo = budget.toObject();
+		const expenses = await Expense.find({ budget: budget._id });
+
+		res.status(200).json({
+			...budgetPojo,
+			expenses,
+		});
 	} catch (err) {
 		logger.error(err.message);
 		res.status(500).json({ message: 'Error' });

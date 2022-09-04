@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'node:crypto';
 
 const AWS_KEY = process.env.AWS_KEY;
 const AWS_SECRET = process.env.AWS_SECRET;
@@ -7,7 +7,7 @@ const regionName = 'ap-south-1';
 
 const maxFileSize = 200 * 1024 * 1024;
 
-class S3SignedPolicy {
+export class S3SignedPolicy {
 	constructor(bucketName) {
 		this.bucket = bucketName;
 		this.bucketAcl = 'public-read';
@@ -68,5 +68,3 @@ class S3SignedPolicy {
 		return encodedPolicy;
 	}
 }
-
-module.exports = { S3SignedPolicy };
