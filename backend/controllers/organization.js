@@ -93,15 +93,16 @@ export const createTeam = async (req, res) => {
 			{ email: { $in: req.body.members.map(({ email }) => email) } },
 			{ _id: 1, email: 1 }
 		);
+		const userIDs = users.map(({ _id }) => _id);
 
 		const userEmailToID = Object.fromEntries(users.map(({ email, _id }) => [email, _id]));
 
-		if (users.length !== req.body.members.length) {
+		if (userIDs.length !== req.body.members.length) {
 			return res.status(404).json({ message: "Some E-Mails don't have BudJet account." });
 		}
 
 		const members = await Member.find({
-			user: { $in: users.map(({ _id }) => _id) },
+			user: { $in: userIDs },
 			organization: res.locals.orgID,
 		});
 
@@ -112,12 +113,6 @@ export const createTeam = async (req, res) => {
 		const team = new Team({
 			name: req.body.name,
 			organization: res.locals.orgID,
-			members: req.body.members.map((member) => {
-				return {
-					id: members.find(({ email, user }) => user.equals(userEmailToID[email]))._id,
-					level: member.level,
-				};
-			}),
 		});
 		await team.save();
 

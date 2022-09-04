@@ -24,7 +24,7 @@ export const verifyAuthToken = (req, res, next) => {
 export const verifyOrgMember = async (req, res, next) => {
 	try {
 		const member = await Member.findOne({
-			id: res.locals._id,
+			user: res.locals._id,
 			organization: req.params.orgID,
 		});
 		if (!member) {
@@ -33,7 +33,6 @@ export const verifyOrgMember = async (req, res, next) => {
 
 		res.locals.orgID = req.params.orgID;
 		res.locals.member = member;
-
 		return next();
 	} catch (error) {
 		logger.error(error.message, error);

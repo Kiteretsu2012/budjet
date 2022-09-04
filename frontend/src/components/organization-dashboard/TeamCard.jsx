@@ -1,4 +1,4 @@
-import { Button, Flex, Text, Divider, Heading, Icon, Box } from '@chakra-ui/react';
+import { Button, Flex, Text, Divider, Heading, Icon } from '@chakra-ui/react';
 import { FcOrganization, FcPodiumWithSpeaker } from 'react-icons/fc';
 
 const TeamCard = ({ teamName, organization, members }) => {
@@ -34,7 +34,7 @@ const TeamCard = ({ teamName, organization, members }) => {
 					<Text color="gray.400" mt="5%" fontSize="1rem">
 						<Icon as={FcPodiumWithSpeaker} /> No. Of Members
 					</Text>
-					<Text textAlign="center">{members.length}</Text>
+					<Text textAlign="center">{members?.length}</Text>
 				</Flex>
 			</Flex>
 			<Flex w="100%" justifyContent="center" mt="20px">

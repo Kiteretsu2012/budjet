@@ -4,12 +4,6 @@ const { Schema } = mongoose;
 const teamSchema = new Schema({
 	name: { type: String },
 	organization: mongoose.SchemaTypes.ObjectId,
-	members: [
-		{
-			id: { type: mongoose.SchemaTypes.ObjectId, ref: 'members' },
-			level: { type: String, enum: ['LEADER', 'MEMBER'] },
-		},
-	],
 });
 
 teamSchema.index({ name: 1, organization: 1 }, { unique: true });

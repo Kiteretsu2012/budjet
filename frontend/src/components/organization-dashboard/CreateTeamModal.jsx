@@ -19,7 +19,6 @@ import {
 	FormErrorMessage,
 	useToast,
 	Flex,
-	Box,
 } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import { useState, useEffect } from 'react';
@@ -27,6 +26,7 @@ import { TiBusinessCard } from 'react-icons/ti';
 import { useFormik } from 'formik';
 import api from '../../utils/api';
 import { BsTrashFill } from 'react-icons/bs';
+import { getCurrentOrgID } from '../../utils/getOrgIdFromURL';
 const initialValues = {
 	teamName: '',
 	email: '',
@@ -46,7 +46,7 @@ const roleDisplayMap = {
 };
 
 const CreateTeamModal = ({ isOpen, onClose }) => {
-	const orgID = window.location.pathname.split('/')[2];
+	const orgID = getCurrentOrgID();
 	const toast = useToast();
 	const [teamMembers, setTeamMembers] = useState([]);
 	const [formData, setFormData] = useState({});
@@ -54,7 +54,6 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 		setFormData((prevState) => ({ ...prevState, members: teamMembers }));
 	}, [teamMembers]);
 	const onSubmit = async (v, actions) => {
-		console.log('in');
 		const { email, level, teamName } = v;
 		try {
 			const res = await api.post('user/check', {
@@ -82,9 +81,7 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 	const createTeam = async () => {
 		if (teamMembers.length) {
 			try {
-				const res = await api.post('org/team', {
-					...formData,
-				});
+				const res = await api.post('org/' + orgID + '/team', formData);
 			} catch (err) {
 				const message = JSON.parse(await err.response.text()).message;
 				toast({
@@ -192,6 +189,7 @@ const CreateTeamModal = ({ isOpen, onClose }) => {
 										placeholder="Choose Role"
 									>
 										{ROLES.map((elem) => (
+											// eslint-disable-next-line react/no-unknown-property
 											<option value={elem} key={elem}>
 												{roleDisplayMap[elem]}
 											</option>
