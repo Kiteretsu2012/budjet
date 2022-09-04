@@ -3,13 +3,15 @@ import { FcOrganization, FcPodiumWithSpeaker } from 'react-icons/fc';
 
 const TeamCard = ({ teamName, organization, members }) => {
 	return (
-		<GridItem
+		<Flex
+			w="25%"
 			h="auto"
 			maxH="200px"
 			bg="blackAlpha.100"
 			color="black"
 			p="1rem"
 			minW="350px"
+			mb="1rem"
 			style={{
 				borderRadius: '12px',
 				background: '#fff',
@@ -34,7 +36,7 @@ const TeamCard = ({ teamName, organization, members }) => {
 					View Members
 				</Button>
 			</Flex>
-		</GridItem>
+		</Flex>
 	);
 };
 

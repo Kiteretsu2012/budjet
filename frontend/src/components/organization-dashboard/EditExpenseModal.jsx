@@ -17,7 +17,6 @@ import {
 	Textarea,
 	useToast,
 	Flex,
-	SelectField,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -25,7 +24,6 @@ import { TiBusinessCard } from 'react-icons/ti';
 import { useLocation } from 'wouter';
 import * as Yup from 'yup';
 import api from '../../utils/api';
-import { makeS3UploadData, upload } from '../../utils/S3';
 
 const validationSchema = Yup.object({
 	title: Yup.string().required('Required'),
@@ -35,42 +33,41 @@ const validationSchema = Yup.object({
 	C: Yup.number(),
 });
 
-function AddExpenseModal({
+function EditExpenseModal({
 	orgID,
-	isAddExpenseModalVisible,
-	setIsAddExpenseModalVisible,
+	isEditExpenseModalVisible,
+	setIsEditExpenseModalVisible,
 	setExpenses,
+	initialValues,
+	editId,
 }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [selectedFile, setSelectedFile] = useState(null);
-
+	const [location, setLocation] = useLocation();
 	const toast = useToast();
 
 	const formik = useFormik({
-		initialValues: {
-			title: '',
-			description: '',
-			A: '',
-			B: '',
-			C: '',
-		},
+		initialValues,
 		onSubmit: async (values) => {
 			try {
 				const budgetID = window.location.pathname.split('/')[4];
 				setIsSubmitting(true);
-				const URL = await upload(selectedFile);
 				const parsedValues = {
 					...values,
-					amount: { A: values.A, B: values.B, C: values.C },
-					invoice: URL,
+					amounts: { A: values.A, B: values.B, C: values.C },
 				};
 				delete parsedValues.A;
 				delete parsedValues.B;
 				delete parsedValues.C;
-				const res = await api.post(`org/${orgID}/budget/${budgetID}/expense`, parsedValues);
+				console.log(parsedValues);
+				const res = await api.post(
+					`org/${orgID}/budget/${budgetID}/expense/${editId}`,
+					parsedValues
+				);
+				console.log(res);
 				setIsSubmitting(false);
-				setIsAddExpenseModalVisible(false);
-				setExpenses((oldValue) => [...oldValue, res]);
+				setIsEditExpenseModalVisible(false);
+				setExpenses((oldValue) => oldValue.map((elem) => (elem.id != editId ? elem : res)));
+				window.location.reload();
 			} catch (err) {
 				setIsSubmitting(false);
 				toast({
@@ -85,12 +82,12 @@ function AddExpenseModal({
 		validationSchema,
 	});
 	const onClose = () => {
-		setIsAddExpenseModalVisible(false);
+		setIsEditExpenseModalVisible(false);
 		setIsSubmitting(false);
 	};
 
 	return (
-		<Modal isOpen={isAddExpenseModalVisible} onClose={onClose}>
+		<Modal isOpen={isEditExpenseModalVisible} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Create an Expense</ModalHeader>
@@ -180,20 +177,6 @@ function AddExpenseModal({
 							</InputGroup>
 							<FormErrorMessage>{formik.errors.C}</FormErrorMessage>
 						</FormControl>
-						<FormControl mb="1rem">
-							<FormLabel>Invoice</FormLabel>
-							<Input
-								onChange={(e) => {
-									setSelectedFile(e.target.files[0]);
-								}}
-								multiple={false}
-								type="file"
-								accept="application/pdf"
-								name="invoice"
-								placeholder="Enter amount of the expense"
-							/>
-						</FormControl>
-
 						<Flex justify="end">
 							<Button
 								colorScheme="blue"
@@ -217,4 +200,4 @@ function AddExpenseModal({
 	);
 }
 
-export default AddExpenseModal;
+export default EditExpenseModal;

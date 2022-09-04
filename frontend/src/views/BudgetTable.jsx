@@ -11,22 +11,27 @@ import {
 	useToast,
 	Button,
 	Flex,
+	Icon,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 import AddExpenseModal from '../components/organization-dashboard/AddExpenseModal';
+import EditExpenseModal from '../components/organization-dashboard/EditExpenseModal';
+import { BiEditAlt } from 'react-icons/bi';
 
 const BudgetTable = () => {
 	const toast = useToast();
 	const [expenses, setExpenses] = useState([]);
 	const [isAddExpenseModalVisible, setIsAddExpenseModalVisible] = useState(false);
+	const [isEditExpenseModalVisible, setIsEditExpenseModalVisible] = useState(false);
+	const [editInitData, setEditInitData] = useState({});
+	const [editId, setEditId] = useState('');
 	useEffect(() => {
 		const dataFetcher = async () => {
 			const orgID = window.location.pathname.split('/')[2];
 			const expenseID = window.location.pathname.split('/')[4];
 			try {
 				const res = await api.get(`org/${orgID}/budget/${expenseID}`).json();
-				console.log(res);
 				setExpenses(res.expenses);
 			} catch (err) {
 				const message = JSON.parse(await err.response.text()).message;
@@ -41,7 +46,6 @@ const BudgetTable = () => {
 		};
 		dataFetcher();
 	}, []);
-	console.log(expenses);
 	return (
 		<>
 			<Flex justify="end">
@@ -51,15 +55,21 @@ const BudgetTable = () => {
 					setIsAddExpenseModalVisible={setIsAddExpenseModalVisible}
 					setExpenses={setExpenses}
 				/>
+				{Object.keys(editInitData).length && (
+					<EditExpenseModal
+						orgID={window.location.pathname.split('/')[2]}
+						isEditExpenseModalVisible={isEditExpenseModalVisible}
+						setIsEditExpenseModalVisible={setIsEditExpenseModalVisible}
+						initialValues={editInitData}
+						setExpenses={setExpenses}
+						editId={editId}
+					/>
+				)}
 				<Button
-					bg="#14ee10"
-					_hover={{
-						bg: '#0Ae406',
-					}}
+					colorScheme="whatsapp"
 					onClick={() => {
 						setIsAddExpenseModalVisible(true);
 					}}
-					color="white"
 					mb="20px"
 				>
 					New Expense
@@ -81,18 +91,41 @@ const BudgetTable = () => {
 							<Th>Plan-A</Th>
 							<Th>Plan-B</Th>
 							<Th>Plan-C</Th>
+							<Th>Edit</Th>
+							<Th>Invoices</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
-						{expenses.map(({ title, description, amounts: { A, B, C } }) => (
-							<Tr key={title}>
-								<Td>{title}</Td>
-								<Td>{description}</Td>
-								<Td>{A}</Td>
-								<Td>{B}</Td>
-								<Td>{C}</Td>
-							</Tr>
-						))}
+						{expenses.map(
+							({ title, description, _id, amounts: { A, B, C }, invoice }) => (
+								<Tr key={title}>
+									<Td>{title}</Td>
+									<Td>{description}</Td>
+									<Td>{A}</Td>
+									<Td>{B}</Td>
+									<Td>{C}</Td>
+									<Td>
+										<Button
+											variant="outline"
+											onClick={() => {
+												setEditInitData({
+													title,
+													description,
+													A,
+													B,
+													C,
+												});
+												setEditId(_id);
+												setIsEditExpenseModalVisible(true);
+											}}
+										>
+											<Icon as={BiEditAlt} />
+										</Button>
+									</Td>
+									<Td>{invoice}</Td>
+								</Tr>
+							)
+						)}
 					</Tbody>
 				</Table>
 			</TableContainer>
