@@ -110,7 +110,7 @@ const BudgetTable = () => {
 												B,
 												C,
 											});
-											setIsEditExpenseVisible(true);
+											setIsEditExpenseModalVisible(true);
 										}}
 									>
 										<Icon as={BiEditAlt} />
