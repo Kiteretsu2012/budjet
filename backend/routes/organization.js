@@ -10,7 +10,7 @@ organizationRouter.delete('', verifyOrgAdmin, orgController.deleteOrganization);
 
 organizationRouter.get('/stats', orgController.getStats);
 organizationRouter.get('/budgets', orgController.getBudgets);
-organizationRouter.get('/teams', orgController.getBudgets);
+organizationRouter.get('/teams', orgController.getTeams);
 
 organizationRouter.post('/team', verifyOrgAdmin, orgController.createTeam);
 // organizationRouter.post(

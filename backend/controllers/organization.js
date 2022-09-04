@@ -68,7 +68,10 @@ export const getBudgets = async (req, res) => {
 
 export const getTeams = async (req, res) => {
 	try {
-		const teams = await Team.find({ organization: res.locals.orgID });
+		const teams = await Team.find({ organization: res.locals.orgID }).populate(
+			'organization',
+			'name'
+		);
 		res.status(200).json(teams);
 	} catch (err) {
 		logger.error(err.message);
