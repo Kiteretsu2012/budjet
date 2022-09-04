@@ -36,7 +36,6 @@ function AddBudgetModal({ orgID, isAddBudgetModalVisible, setIsAddBudgetModalVis
 	const [teams, setTeams] = useState([]);
 	const [selected, setSelected] = useState([]);
 	const toast = useToast();
-	console.log(teams);
 	const formik = useFormik({
 		initialValues: {
 			title: '',

@@ -30,7 +30,6 @@ function JoinOrg() {
 		onSubmit: async (values) => {
 			try {
 				setIsSubmitting(true);
-				console.log(values);
 				const res = await api.put(`user/join/org/${values.joiningCode}`, values);
 				setIsSubmitting(false);
 				if (res?.token) {
@@ -38,7 +37,6 @@ function JoinOrg() {
 				}
 				setLocation(`/org/${res._id}`);
 			} catch (err) {
-				console.log(err);
 				toast({
 					title: 'Error',
 					description: err.message,

@@ -54,7 +54,6 @@ function AddExpenseModal({
 		onSubmit: async (values) => {
 			try {
 				const budgetID = window.location.pathname.split('/')[4];
-				console.log('in2');
 				setIsSubmitting(true);
 				const parsedValues = {
 					...values,
@@ -182,7 +181,6 @@ function AddExpenseModal({
 								mr={3}
 								type="submit"
 								onClick={() => {
-									console.log('in');
 									formik.handleSubmit();
 								}}
 								isLoading={isSubmitting}
