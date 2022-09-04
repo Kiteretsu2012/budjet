@@ -36,7 +36,7 @@ budgetRouter.post('', verifyAdminOrLeader, budgetController.createBudget);
 budgetRouter.get('/:budgetID', verifyBudgetAccess, budgetController.getFullBudget);
 
 budgetRouter.post('/:budgetID/expense', verifyBudgetAccess, budgetController.createExpense);
-budgetRouter.put(
+budgetRouter.post(
 	'/:budgetID/expense/:expenseID',
 	verifyBudgetAccess,
 	budgetController.updateExpense

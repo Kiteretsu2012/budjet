@@ -67,9 +67,11 @@ export const createExpense = async (req, res) => {
 
 export const updateExpense = async (req, res) => {
 	try {
-		const updatedExpense = await Expense.findByIdAndUpdate(req.params.id, req.body, {
+		const updatedExpense = await Expense.findByIdAndUpdate(req.params.expenseID, req.body, {
 			new: true,
 		});
+		logger.info(updatedExpense);
+		logger.info(req.body);
 		res.status(200).json(updatedExpense.toObject());
 	} catch (err) {
 		logger.error(err.message);
