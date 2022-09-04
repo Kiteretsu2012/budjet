@@ -146,7 +146,6 @@ function AddExpenseModal({
 									<Icon as={TiBusinessCard} w={7} h={7} />
 								</InputLeftElement>
 								<Input
-									required
 									onChange={formik.handleChange}
 									value={formik.values.B}
 									name="B"
@@ -164,7 +163,6 @@ function AddExpenseModal({
 									<Icon as={TiBusinessCard} w={7} h={7} />
 								</InputLeftElement>
 								<Input
-									required
 									onChange={formik.handleChange}
 									value={formik.values.C}
 									name="C"
