@@ -20,22 +20,21 @@ const makeS3UploadData = async (policy, file) => {
 };
 
 const upload = async (file) => {
-	const res = await api.get('/s3-signed-policy'); // change
+	const res = await (await api.get('s3-signed-policy')).json();
 
-	const S3SignedPolicyObject = { ...res.data.data };
+	const S3SignedPolicyObject = { ...res };
 	const bucketWriteUrl = `https://${S3SignedPolicyObject.bucket}.s3.ap-south-1.amazonaws.com/`;
 
-	const { name, roll } = JSON.parse(localStorage.studentData || '{}'); // change
-	const filename = `${name.replace(/ /g, '')}-${roll}-CV.${file.name.split('.').pop()}`;
+	// const { name, roll } = JSON.parse(localStorage.studentData || '{}'); // change
 
 	const fd = await makeS3UploadData(S3SignedPolicyObject, {
-		name: filename,
+		name: file.name,
 		type: file.type,
 		file,
 	});
 
-	await ky.post(bucketWriteUrl, fd, { withCredentials: false });
-	const URL = `${bucketWriteUrl}${filename}`;
+	await ky.post(bucketWriteUrl, { body: fd, withCredentials: false });
+	const URL = file.name;
 	return URL;
 };
 

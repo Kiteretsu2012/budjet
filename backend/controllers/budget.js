@@ -55,6 +55,7 @@ export const createExpense = async (req, res) => {
 			description: req.body.description,
 			budget: res.locals.budgetID,
 			amounts: req.body.amount,
+			invoice: req.body.invoice,
 		});
 		await expense.save();
 		res.status(200).json(expense.toObject());
