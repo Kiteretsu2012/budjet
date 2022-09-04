@@ -12,18 +12,21 @@ const expenseSchema = new Schema({
 		C: Number,
 	},
 	tags: { type: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'tags' }], default: [] },
-	invoice: { type: String },
+	invoice: { type: String, get: (val) => process.env.AWS_BUCKET_URL + '/' + val },
+
+	lastUpdated: Date,
+	createdAt: Date,
 });
 
 expenseSchema.pre('save', function save(next) {
-	const profile = this;
-	profile.lastUpdated = Date.now();
+	const doc = this;
+	doc.createdAt = Date.now();
 	next();
 });
 
 expenseSchema.pre('updateOne', function updateOne(next) {
-	const profile = this;
-	profile.lastUpdated = Date.now();
+	const doc = this;
+	doc.lastUpdated = Date.now();
 	next();
 });
 
